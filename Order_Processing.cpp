@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 const int max_orders = 50; // global var 
@@ -53,14 +54,14 @@ void ModifyOrder() {
         if (orders[i].orderId == ID) {
             found = true;
 
-            cout << "Enter The Customer Name: ";
+            cout << "Enter The New Customer's Name: ";
             cin.ignore();
             getline(cin, orders[i].customer_name);
 
-            cout << "Enter The Item Ordered: ";
+            cout << "Enter The New Item Ordered: ";
             getline(cin, orders[i].ordered_items);
 
-            cout << "Enter The Amount: ";
+            cout << "Enter The New Amount: ";
             cin >> orders[i].amount;
 
             cout << "Order Has Been Successfully Modified HEHE." << endl;
@@ -107,10 +108,28 @@ void OutputOrders() {
         return;
     }
 
+    ofstream outputFile("orders.txt");
+
+    if (!outputFile.is_open()) {
+        cout << "Error opening file." << endl;
+        return;
+    }
+
+    for (int i = 0; i < order_nums; i++) {
+        outputFile << "Order ID: " << orders[i].orderId << "\n";
+        outputFile << "Customer Name: " << orders[i].customer_name << "\n";
+        outputFile << "Items Ordered: " << orders[i].ordered_items << "\n";
+        outputFile << "Quantity: " << orders[i].amount << "\n\n";
+    }
+
+    outputFile.close();
+
+    cout << "Orders written to file successfully." << endl;
+
     cout << "These Are All The Orders:" << endl;
     for (int i = 0; i < order_nums; i++) {
 
-         cout << "----------------------" << endl;
+        cout << "----------------------" << endl;
         cout << "Order ID: " << orders[i].orderId << endl;
         cout << "Customer Name: " << orders[i].customer_name << endl;
         cout << "Items Ordered: " << orders[i].ordered_items << endl;
