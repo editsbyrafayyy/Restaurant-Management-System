@@ -142,6 +142,8 @@ int main() {
     int option;
 
     do {
+        cout<<"----------------------" << endl;
+
         cout<<"1. Create A New Order" << endl;
         cout<<"2. Modify A Existing Order" << endl;
         cout<<"3. Cancel An Order" << endl;
@@ -149,7 +151,6 @@ int main() {
         cout<<"5. Exit" << endl;
 
         cout<<"----------------------" << endl;
-        cout<<endl;
 
         cout<<"Enter your option: ";
         cin>>option;
