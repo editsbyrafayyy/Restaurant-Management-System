@@ -12,82 +12,82 @@ void manageMenu();
 void displayOptions(int a);
 //_____________________________________________________________________
 
-	class MenuItem
-	{
-	private:
-		string name;
-		double price;
-		string description;
-		bool availaiblity;
-		string category;
-	public:
-		void setName(std::string itemName) {
-			name = itemName;
-		}
+class MenuItem
+{
+private:
+	string name;
+	double price;
+	string description;
+	bool availaiblity;
+	string category;
+public:
+	void setName(std::string itemName) {
+		name = itemName;
+	}
 
-		void setPrice(double itemprice) {
-			price = itemprice;
-		}
+	void setPrice(double itemprice) {
+		price = itemprice;
+	}
 
-		void setDescription(string desc) {
-			description = desc;
-		}
+	void setDescription(string desc) {
+		description = desc;
+	}
 
-		void setCategory(string cat) {
-			category = cat;
-		}
+	void setCategory(string cat) {
+		category = cat;
+	}
 
-		void setAvailaibilty(bool aval) {
-			availaiblity = aval;
-		}
+	void setAvailaibilty(bool aval) {
+		availaiblity = aval;
+	}
 
-		string getName() const {
-			return name;
-		}
+	string getName() const {
+		return name;
+	}
 
-		string getCategory() const {
-			return category;
-		}
+	string getCategory() const {
+		return category;
+	}
 
-		double getPrice() const {
-			return price;
-		}
+	double getPrice() const {
+		return price;
+	}
 
-		bool getAvailaibilty() const {
-			return availaiblity;
-		}
+	bool getAvailaibilty() const {
+		return availaiblity;
+	}
 
-		string getDescription() const {
-			return description;
-		}
-		
-		string serialize() const {
-			// Will be used in loading and unloading objects from text file
-			return name + "*" + to_string(price) + "*" + description + "*" + (availaiblity ? "1" : "0") 
-				+ "*" + category;
-		}
+	string getDescription() const {
+		return description;
+	}
 
-		void deserialize(const string& serialzedstring) {
-			// Breaks down the concatenated data line  
-			istringstream iss(serialzedstring); // treats the input as a stream
+	string serialize() const {
+		// Will be used in loading and unloading objects from text file
+		return name + "*" + to_string(price) + "*" + description + "*" + (availaiblity ? "1" : "0")
+			+ "*" + category;
+	}
 
-			getline(iss, name, '*');
-			iss >> price;
-			iss.ignore(); // Ignore the delimiter and any leading whitespaces
-			getline(iss, description, '*');
+	void deserialize(const string& serialzedstring) {
+		// Breaks down the concatenated data line  
+		istringstream iss(serialzedstring); // treats the input as a stream
 
-			// Read availability as a string
-			string availaibilityStr;
-			getline(iss, availaibilityStr, '*');
+		getline(iss, name, '*');
+		iss >> price;
+		iss.ignore(); // Ignore the delimiter and any leading whitespaces
+		getline(iss, description, '*');
 
-			// Convert the availability string to a boolean
-			availaiblity = (availaibilityStr == "1");
+		// Read availability as a string
+		string availaibilityStr;
+		getline(iss, availaibilityStr, '*');
 
-			// Read the category
-			getline(iss, category, '*');
-		}
-	
-	};
+		// Convert the availability string to a boolean
+		availaiblity = (availaibilityStr == "1");
+
+		// Read the category
+		getline(iss, category, '*');
+	}
+
+};
 
 //_________________________________________________________________________________________________________
 //_________________________________________________________________________________________________________
@@ -101,10 +101,10 @@ void saveMenuItemsToFile(const vector<MenuItem>& items, const string& filename) 
 			file << item.serialize() << "\n";
 		}
 		file.close();
-		std::cout << "Menu items saved to " << filename << std::endl;
+		cout << "Menu items saved to " << filename << endl;
 	}
 	else {
-		std::cerr << "Unable to open file: " << filename << std::endl;
+		cout << "Unable to open file: " << filename << endl;
 	}
 }
 
@@ -135,11 +135,11 @@ int main() {
 	{
 		displayOptions(0);
 		int n; cin >> n; cin.ignore();
-		if (n==1)
+		if (n == 1)
 		{
 			manageMenu();
 		}
-		else if (n==10)
+		else if (n == 10)
 		{
 			system("cls");
 			cout << "Thanks for using our application!" << endl;
@@ -176,15 +176,15 @@ void displayOptions(int a) {
 	}
 }
 
- void manageMenu() {
+void manageMenu() {
 	system("cls");
 	cout << "\t---Manage your Returant menu---" << endl;
-	displayOptions(1); 
+	displayOptions(1);
 	cout << "Enter your option (number): " << endl;
 	int option; cin >> option; // Provide, with and make them select their option
 	cin.ignore();
-	
-	if (option==1) // DISPLAY CURRENT MENU
+
+	if (option == 1) // DISPLAY CURRENT MENU
 	{
 		vector<MenuItem> loadedMenu = loadMenuItemsFromFile(filename);
 		for (const auto& item : loadedMenu) {
@@ -196,7 +196,7 @@ void displayOptions(int a) {
 			cout << "-----------------\n";
 		}
 	}
-	else if (option==2)
+	else if (option == 2)
 	{
 		string newItemName, newItemDescription, newItemCategory;
 		double newItemPrice;
@@ -229,5 +229,40 @@ void displayOptions(int a) {
 		saveMenuItemsToFile(menuItems, filename);
 
 		cout << "New item added and saved to the menu file.\n";
+	}
+	else if (option == 3)//     REMOVE AN ITEM FROM MENU PERMENANTLY
+	{
+		system("cls");
+		cout << "WARNING: Items deletion is permenant" << endl;
+		cout << "Enter 'y' to load item list or anyother key to skip ahead: ";
+		char y; cin >> y;
+		cin.ignore();
+		vector<MenuItem> loadedMenu = loadMenuItemsFromFile(filename);
+
+		if (y == 'y' || y == 'Y')
+		{
+			int n = 0;
+			for (const auto& item : loadedMenu)
+			{
+				cout << n++ << ")" << item.getName() << endl;
+			}
+		}
+		string delitem;
+		cout << "Please enter the name of the Item you want to delete: " << endl;
+		getline(cin, delitem);
+
+		auto it = remove_if(loadedMenu.begin(), loadedMenu.end(), [delitem](const MenuItem item)
+			{return (delitem == item.getName()) ? true : false; }); //i'm so surprised i wrote this myself lmao
+		if (it == loadedMenu.end())
+		{
+			cout << "Item " << delitem << " Not found :(" << endl;
+		}
+		else
+		{
+			loadedMenu.erase(it, loadedMenu.end());
+			cout << "Item Removed Succesfully! :)" << endl;
+		}
+
+		saveMenuItemsToFile(loadedMenu, filename);
 	}
 }
