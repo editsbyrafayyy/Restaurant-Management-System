@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
+#include <vector>
 using namespace std;
 
 const int max_orders = 50; // global var 
