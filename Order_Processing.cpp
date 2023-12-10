@@ -160,24 +160,20 @@ void CancelOrder() {
   cout << "Enter order ID to cancel: ";
   cin >> ID;
 
-  // Loop through orders to find the target one
-  for (int i = 0; i < order_nums; i++) {
+  for (int i = 0; i < order_nums; i++) { //basic searching again
     if (orders[i].orderId == ID) {
       found = true;
 
-      // Special case for first order
-      if (i == 0) {
-        // Mark the first order as deleted with an empty object
+      if (i == 0) { // the first order was bugging so had to make a case for it
         orders[i] = Orders{};
-        // Update order count and adjust loop index
         order_nums--;
         i++;
       } else {
-        // Shift remaining orders towards the beginning
-        for (int j = i; j < order_nums; j++) {
+
+        for (int j = i; j < order_nums; j++) { //filling the gaps in a nutshell
           orders[j - 1] = orders[j];
         }
-        // Update order count
+
         order_nums--;
       }
 
@@ -185,8 +181,7 @@ void CancelOrder() {
     }
   }
 
-  // Rewrite the "orders.txt" file with updated data
-  ofstream outputFile;
+  ofstream outputFile; // rewrting the data back to the file
   outputFile.open("orders.txt", ios::trunc);
 
   if (!outputFile.is_open()) {
@@ -214,7 +209,7 @@ void CancelOrder() {
   }
 }
 
-void OutputOrders() {
+void OutputOrders() { // this for testing purposes only
 
     ifstream inputFile;
     inputFile.open("orders.txt");
@@ -230,17 +225,6 @@ void OutputOrders() {
     }
 
     cout << "These Are All The Orders" << endl;
-
-    // for (int i = 0; i < order_nums; i++) {
-
-    //     cout << "----------------------" << endl;
-    //     cout << "Order ID: " << orders[i].orderId << endl;
-    //     cout << "Customer Name: " << orders[i].customer_name << endl;
-    //     cout << "Items Ordered: " << orders[i].ordered_items << endl;
-    //     cout << "Quantity: " << orders[i].quantity << endl;
-    //     cout << "Total Price: " << orders[i].total_cost << endl;
-    //     cout << "----------------------" << endl;
-    // }
 }
 
 void CustomerSatisfaction(int customerId) {
@@ -270,8 +254,7 @@ void CustomerSatisfaction(int customerId) {
     cin.ignore();
     getline(cin, clean);
 
-    // Save the feedback to a file or perform any other actions as needed
-    ofstream feedbackFile("customer_feedback.txt", ios::app);
+    ofstream feedbackFile("customer_feedback.txt", ios::app); // saving the feedback using append
     if (feedbackFile) {
         feedbackFile << "Customer ID: " << customerId << endl;
         feedbackFile << "--------------------------------------" << endl;
@@ -297,9 +280,9 @@ void GenerateInvoice() {
   bool found = false;
 
   for (int i = 0; i < order_nums; i++) {
-    if (orders[i].orderId == ID) {
+    if (orders[i].orderId == ID) { // basic searching using ID again
       found = true;
-      // Found the order
+
 
       char saveInvoice;
       cout << "Do you want to save the invoice for order ID " << ID << " to a file? (Y/N): ";
@@ -317,8 +300,7 @@ void GenerateInvoice() {
           return;
         }
 
-        // Write the invoice information to the file
-        outputFile << "---------------------------" << endl;
+        outputFile << "---------------------------" << endl; // invoice in the file
         outputFile << "Order ID: " << orders[i].orderId << endl;
         outputFile << "Customer Name: " << orders[i].customer_name << endl;
         outputFile << "---------------------------" << endl;
