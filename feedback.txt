@@ -1,0 +1,11 @@
+---------------------------
+Order ID: 4
+Customer Name: John Cena
+---------------------------
+Ordered Items:
+ - A dad
+---------------------------
+Quantity: 1
+Price per item: 2000 Rs
+Total Cost: 2000 Rs
+---------------------------

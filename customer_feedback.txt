@@ -1,0 +1,8 @@
+Customer ID: 4
+--------------------------------------
+Waiter Name: Hamiz
+Taste: eutral
+Temperature: atisfied
+Speed of Service: eutral
+Staff Friendliness: issatisified
+--------------------------------------
