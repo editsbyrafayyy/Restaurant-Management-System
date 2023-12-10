@@ -1,0 +1,19 @@
+Bacon, Egg & Cheese Biscuit*3.99*Bacon, eggs, American Cheese, biscuit*1*Breakfast
+Double Cheeseburger*5.99*Two beef patties, American cheese, pickles, onions, ketchup, mustard*1*Lunch
+Chicken Tenders*6.49*Fried chicken tenders, dipping sauce*1*Lunch
+Big Combo Meal*8.99*Double cheeseburger, medium fries, medium drink*1*Lunch
+Caesar Salad*7.99*Romaine lettuce, croutons, parmesan cheese, Caesar dressing*1*Lunch
+Grilled Chicken Sandwich*5.79*Grilled chicken breast, lettuce, tomato, mayonnaise, bun*1*Lunch
+Fish Fillet Sandwich*6.99*Breaded fish fillet, tartar sauce, lettuce, bun*1*Lunch
+Spicy Chicken Wrap*4.49*Spicy chicken, lettuce, tomato, ranch dressing, tortilla*1*Lunch
+Loaded Nachos*8.29*Tortilla chips, seasoned beef, cheese sauce, tomatoes, jalapeños*1*Appetizer
+Mozzarella Sticks*4.99*Breaded mozzarella cheese sticks, marinara sauce*1*Appetizer
+Onion Rings*3.49*Breaded onion rings, dipping sauce*1*Appetizer
+Cheese Fries*4.79*French fries, cheese sauce, bacon bits, green onions*1*Appetizer
+Chocolate Milkshake*3.99*Chocolate ice cream, milk, whipped cream, cherry*1*Beverage
+Strawberry Lemonade*2.49*Lemonade, strawberry flavoring, ice*1*Beverage
+Iced Coffee*2.79*Cold brew coffee, milk, sweetener, ice*1*Beverage
+Classic Sundae*4.29*Vanilla ice cream, hot fudge, whipped cream, nuts, cherry*1*Dessert
+Apple Pie*1.99*Warm apple pie, cinnamon, sugar, crust*1*Dessert
+Chocolate Brownie*3.49*Rich chocolate brownie, vanilla ice cream*1*Dessert
+Fruit Parfait*4.99*Yogurt, granola, mixed fruits, honey*1*Dessert
