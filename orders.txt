@@ -1,24 +1,14 @@
 Order ID: 1
-Customer Name: Mustafa Kamal Atturk
-Items Ordered: Caliphate of turkey
-Quantity: 10
-Total Price in PKR: 10 Rs
+Customer Name: ali
+Items Ordered: job
+Quantity: 2
+Total Price in PKR: 46 Rs
+Assigned Table: 2
 
 Order ID: 2
-Customer Name: Adolf Hitler
-Items Ordered: The Jews
-Quantity: 6000000
-Total Price in PKR: 90000000 Rs
-
-Order ID: 3
-Customer Name: Joseph Stalin
-Items Ordered: The Soviet People
-Quantity: 3000000
-Total Price in PKR: 36000000 Rs
-
-Order ID: 4
-Customer Name: John Cena
-Items Ordered: A dad
-Quantity: 1
-Total Price in PKR: 2000 Rs
+Customer Name: joe
+Items Ordered: wad
+Quantity: 3
+Total Price in PKR: 333 Rs
+Assigned Table: 2
 

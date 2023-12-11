@@ -1,8 +1,9 @@
-Customer ID: 4
+Customer ID: 1
 --------------------------------------
-Waiter Name: Hamiz
-Taste: eutral
-Temperature: atisfied
-Speed of Service: eutral
-Staff Friendliness: issatisified
+Waiter Name: ahmed bula
+Taste: ood
+Temperature: vg
+Speed of Service: ad
+Staff Friendliness: vg
+Cleanliness: ad
 --------------------------------------

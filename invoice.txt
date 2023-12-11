@@ -1,11 +1,12 @@
 ---------------------------
-Order ID: 4
-Customer Name: John Cena
+Order ID: 1
+Customer Name: ali
 ---------------------------
 Ordered Items:
- - A dad
+ - job
+ - job
 ---------------------------
-Quantity: 1
-Price per item: 2000 Rs
-Total Cost: 2000 Rs
+Quantity: 2
+Price per item Rs: 23
+Total Cost Rs: 46
 ---------------------------

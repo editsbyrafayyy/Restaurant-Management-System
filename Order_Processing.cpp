@@ -3,149 +3,230 @@
 #include <fstream>
 using namespace std;
 
-const int max_orders = 50; // global var 
+const int max_orders = 50; // max orders
+const int max_tables = 10; // max tables
 
-struct Orders { // using structures instead of implementing OOP
-    int orderId;
-    string customer_name;
-    string ordered_items;
-    int quantity;
-    int price;
-    int total_cost;
+struct Orders {
+  int orderId;
+  string customer_name;
+  string items_ordered;
+  int quantity;
+  int price;
+  int total_cost;
+  int assignedTableId; // table assigned to the order
 };
 
-Orders orders[max_orders]; // Array to store orders
-int order_nums = 0; // Number of orders 
+struct Table {
+  int tableId;
+  bool occupied;
+  int orderId; // -1 if not occupied
+};
 
-void CreateOrder() { // function to create the order
+Orders orders[max_orders]; //declaring a new var with the properties of Orders structure
+int order_nums = 0; // number of orders
 
-    if (order_nums >= max_orders) { // to ensure that the orders don't exceed max 
-        cout << "Max Orders Exceeded" << endl;
-        return;
-    }
+Table tables[max_tables];
+int occupied_tables = 0; // number of occupied tables
 
-    Orders new_order; //declaring new structure var 
+void CreateOrder() {
+  if (order_nums >= max_orders) {
+    cout << "Max Orders Exceeded" << endl;
+    return;
+  }
 
-    cout << "Enter The Order ID: ";
-    string input_id;
+  Orders new_order;
+
+  // Order ID
+  int input_id;
+  do {
+    cout << "Enter Order ID: ";
     cin >> input_id;
+    if (cin.fail()) {
+      cout << "Invalid input. Please enter a number: ";
+      cin.clear();
+      cin.ignore(INT_MAX, '\n');
+    }
+  } while (input_id <= 0);
+  new_order.orderId = input_id;
 
-    new_order.orderId = stoi(input_id);
-
-    cout << "Enter The Customer Name: ";
-    cin.ignore(); // needed for getline for some reason hmmm.
+  // Customer Name
+  string customer_name;
+    cout << "Enter Customer Name: ";
     getline(cin, new_order.customer_name);
+  while (new_order.customer_name.empty()){
+    getline(cin, new_order.customer_name);
+      if (new_order.customer_name.empty()) {
+      cout << "Customer name cannot be empty. Please enter a name: ";
+    }
+  }
 
-    cout << "Enter The Items Ordered: ";
-    getline(cin, new_order.ordered_items);
+  // Ordered Items
+  string items_ordered;
+  do {
+    cout << "Enter Ordered Items: ";
+    getline(cin, new_order.items_ordered);
+    if (new_order.items_ordered.empty()) {
+      cout << "Items ordered cannot be empty. Please enter items: ";
+    }
+  } while (new_order.items_ordered.empty());
 
-    cout << "Enter The quantity: ";
+  // Quantity
+  int quantity;
+  do {
+    cout << "Enter Quantity: ";
     cin >> new_order.quantity;
+    if (cin.fail()) {
+      cout << "Invalid input. Please enter a positive number: ";
+      cin.clear();
+      cin.ignore(INT_MAX, '\n');
+    } else if (new_order.quantity <= 0) {
+      cout << "Quantity must be a positive number. Please try again: ";
+    }
+  } while (new_order.quantity <= 0);
 
-    cout << "Enter The Price: ";
+  // Price
+  double price;
+  do {
+    cout << "Enter Price: ";
     cin >> new_order.price;
-
-    new_order.total_cost = new_order.price * new_order.quantity;
-
-    orders[order_nums++] = new_order;
-    // order_nums++; // incrementing order nums
-
-    cout << "Your Order Has Been Successfully Created LESSSGOOOO!" << endl;
-
-    //adding the order to a file
-
-        if (order_nums == 0) { // if no orders exist
-        cout << "No Orders Are Available." << endl;
-        return;
+    if (cin.fail()) {
+      cout << "Invalid input. Please enter a positive number: ";
+      cin.clear();
+      cin.ignore(INT_MAX, '\n');
+    } else if (new_order.price <= 0.0) {
+      cout << "Price must be a positive number. Please try again: ";
     }
+  } while (price <= 0.0);
 
-    ofstream outputFile;
-    outputFile.open("orders.txt", ios::app);
+  // Total Cost
+  new_order.total_cost = new_order.price * new_order.quantity;
 
-    if (!outputFile.is_open()) {
-        cout << "Error opening file." << endl;
-        return;
+  // Find an available table
+  int assignedTable = -1;
+  for (int i = 0; i < max_tables; ++i) {
+    if (!tables[i].occupied) {
+      assignedTable = i;
+      break;
     }
+  }
 
-    for (int i = order_nums - 1; i < order_nums; i++) {
-        outputFile << "Order ID: " << orders[i].orderId << "\n";
-        outputFile << "Customer Name: " << orders[i].customer_name << "\n";
-        outputFile << "Items Ordered: " << orders[i].ordered_items << "\n";
-        outputFile << "Quantity: " << orders[i].quantity << "\n";
-        outputFile << "Total Price in PKR: " << orders[i].total_cost <<" Rs"<< "\n\n";
-    }
+  if (assignedTable == -1) {
+    cout << "There Are No Tables Available Right Now, Business is Booming ;)" << endl;
+    return;
+  }
 
-    outputFile.close();
+  // Update table and order
+  tables[assignedTable].occupied = true;
+  tables[assignedTable].orderId = new_order.orderId;
+  new_order.assignedTableId = assignedTable;
 
-    cout << "Orders written to file successfully" << endl;
+  // Add to orders array and update counters
+  orders[order_nums++] = new_order;
+  occupied_tables++;
+
+  // Write to file
+  ofstream outputFile("orders.txt", ios::app);
+  if (!outputFile.is_open()) {
+    cout << "Error opening file." << endl;
+    return;
+  }
+
+  outputFile << "Order ID: " << new_order.orderId << "\n";
+  outputFile << "Customer Name: " << new_order.customer_name << "\n";
+  outputFile << "Items Ordered: " << new_order.items_ordered << "\n";
+  outputFile << "Quantity: " << new_order.quantity << "\n";
+  outputFile << "Price: " << new_order.price << " Rs"<< "\n";
+  outputFile << "Total Cost: " << new_order.total_cost << " Rs"<< "\n";
+  outputFile << "Assigned Table: " << occupied_tables << "\n\n";
+  outputFile.close();
+
+  // Confirmation message
+  cout << "Your Order Has Been Successfully Created! Table " << occupied_tables << " has been assigned." << endl;
 }
 
 void ModifyOrder() {
   int ID;
   bool found = false;
 
-  cout << "Enter customer ID to modify order: ";
+  cout << "Enter order ID to modify: ";
   string input_id;
   cin >> input_id;
 
   try {
     ID = stoi(input_id);
-  } catch (const std::invalid_argument& e) {
+  } catch (const invalid_argument& e) {
     cout << "Invalid input. Please enter a valid integer." << endl;
     return;
   }
 
-  ofstream outputFile;
-  outputFile.open("orders.txt", ios::out | ios::ate);
+  // Create a temporary list to store updated orders
+  Orders updatedOrders[max_orders];
+  int updated_order_num = 0;
 
-  if (!outputFile.is_open()) {
-    cout << "Error opening file." << endl;
-    return;
-  }
-
-  for (int i = 0; i < order_nums; i++) {
+  for (int i = 0; i < order_nums; ++i) {
     if (orders[i].orderId == ID) {
       found = true;
 
-      cout<<endl;
+      // Get updated information
+      cout << endl;
       cout << "The Order Has Been Found. What Changes Do You Want to Make?: " << endl;
       cout << "1. Customer Name" << endl;
       cout << "2. Items Ordered" << endl;
       cout << "3. Quantity" << endl;
 
       int choice;
-      cout<<"Enter: ";
+      cout << "Enter: ";
       cin >> choice;
 
       switch (choice) {
-        case 1:
-          cout << "Enter new customer name: ";
-          cin.ignore();
-          getline(cin, orders[i].customer_name);
-          break;
-        case 2:
-          cout << "Enter new items ordered: ";
-          cin.ignore();
-          getline(cin, orders[i].ordered_items);
-          break;
-        case 3:
-          cout << "Enter new quantity: ";
-          cin >> orders[i].quantity;
-          break;
-        default:
-          cout << "Invalid choice." << endl;
-          break;
+      case 1:
+        cout << "Enter new customer name: ";
+        cin.ignore();
+        getline(cin, orders[i].customer_name);
+        break;
+      case 2:
+        cout << "Enter new items ordered: ";
+        cin.ignore();
+        getline(cin, orders[i].items_ordered);
+        break;
+      case 3:
+        cout << "Enter new quantity: ";
+        cin >> orders[i].quantity;
+        orders[i].total_cost = orders[i].price * orders[i].quantity; // recalculate total cost
+        break;
+      default:
+        cout << "Invalid choice." << endl;
+        break;
       }
     }
 
-    outputFile << "Order ID: " << orders[i].orderId << "\n";
-    outputFile << "Customer Name: " << orders[i].customer_name << "\n";
-    outputFile << "Items Ordered: " << orders[i].ordered_items << "\n";
-    outputFile << "Quantity: " << orders[i].quantity << "\n";
-    outputFile << "Total Price in PKR: " << orders[i].total_cost << " Rs" << "\n\n";
+    // Add orders to the temporary list
+    updatedOrders[updated_order_num++] = orders[i];
+  }
+
+  // Rewrite the entire file with updated orders
+  ofstream outputFile;
+  outputFile.open("orders.txt", ios::out | ios::trunc);
+
+  if (!outputFile.is_open()) {
+    cout << "Error opening file." << endl;
+    return;
+  }
+
+  for (int i = 0; i < updated_order_num; ++i) {
+    outputFile << "Order ID: " << updatedOrders[i].orderId << "\n";
+    outputFile << "Customer Name: " << updatedOrders[i].customer_name << "\n";
+    outputFile << "Items Ordered: " << updatedOrders[i].items_ordered << "\n";
+    outputFile << "Quantity: " << updatedOrders[i].quantity << "\n";
+    outputFile << "Total Price in PKR: " << updatedOrders[i].total_cost << " Rs" << "\n";
+    outputFile << "Assigned Table: " << occupied_tables << "\n\n";
   }
 
   outputFile.close();
+
+  // Update order_nums to reflect the changes
+  order_nums = updated_order_num;
+
   cout << "Modifications Have Been Made Successfully" << endl;
 
   if (!found) {
@@ -160,28 +241,25 @@ void CancelOrder() {
   cout << "Enter order ID to cancel: ";
   cin >> ID;
 
-  for (int i = 0; i < order_nums; i++) { //basic searching again
-    if (orders[i].orderId == ID) {
+  // Create a temporary list to store non-canceled orders
+  Orders updatedOrders[max_orders];
+  int updated_order_num = 0;
+
+  for (int i = 0; i < order_nums; ++i) {
+    if (orders[i].orderId != ID) {
+      // Add non-canceled orders to the temporary list
+      updatedOrders[updated_order_num++] = orders[i];
+    } else {
       found = true;
 
-      if (i == 0) { // the first order was bugging so had to make a case for it
-        orders[i] = Orders{};
-        order_nums--;
-        i++;
-      } else {
-
-        for (int j = i; j < order_nums; j++) { //filling the gaps in a nutshell
-          orders[j - 1] = orders[j];
-        }
-
-        order_nums--;
-      }
-
-      break;
+      // Update table status
+      tables[orders[i].assignedTableId].occupied = false;
+      tables[orders[i].assignedTableId].orderId = -1;
     }
   }
 
-  ofstream outputFile; // rewrting the data back to the file
+  // Open the "orders.txt" file in truncate mode
+  ofstream outputFile;
   outputFile.open("orders.txt", ios::trunc);
 
   if (!outputFile.is_open()) {
@@ -189,20 +267,21 @@ void CancelOrder() {
     return;
   }
 
-  // Write only non-empty orders to the file
-  for (int i = 0; i < order_nums; i++) {
-    if (!orders[i].orderId) continue; // skip empty order
-
-    outputFile << "Order ID: " << orders[i].orderId << "\n";
-    outputFile << "Customer Name: " << orders[i].customer_name << "\n";
-    outputFile << "Items Ordered: " << orders[i].ordered_items << "\n";
-    outputFile << "Quantity: " << orders[i].quantity << "\n";
-    outputFile << "Total Price in PKR: " << orders[i].total_cost << " Rs" << "\n\n";
+  // Write only non-canceled orders to the file
+  for (int i = 0; i < updated_order_num; ++i) {
+    outputFile << "Order ID: " << updatedOrders[i].orderId << "\n";
+    outputFile << "Customer Name: " << updatedOrders[i].customer_name << "\n";
+    outputFile << "Items Ordered: " << updatedOrders[i].items_ordered << "\n";
+    outputFile << "Quantity: " << updatedOrders[i].quantity << "\n";
+    outputFile << "Total Price in PKR: " << updatedOrders[i].total_cost << " Rs" << "\n\n";
   }
 
   outputFile.close();
 
-  cout << "The Order Has Been Successfully Canceled MIMIMI." << endl;
+  // Update order_nums to reflect the changes
+  order_nums = updated_order_num;
+
+  cout << "The Order Has Been Successfully Canceled." << endl;
 
   if (!found) {
     cout << "The Order Does Not Exist" << endl;
@@ -227,52 +306,60 @@ void OutputOrders() { // this for testing purposes only
     cout << "These Are All The Orders" << endl;
 }
 
-void CustomerSatisfaction(int customerId) {
-    string waiter_name, taste,temp,speed,staff,clean;
+void CustomerSatisfaction(int customerId) { // for customer feedback, it is called in the generate invoice function
+  string waiterName, taste, temp, speed, staff, clean;
 
-    cout << "What was The Name of The Waiter?: ";
-    cin.ignore();
-    getline(cin, waiter_name);
+  cout << "What was the name of the waiter?: ";
+  cin.ignore();
+  getline(cin, waiterName);
 
-    cout << "Food Taste (Highly Satisfied/Satisfied/Neutral/Dissatisifed): ";
-    cin.ignore();
-    getline(cin, taste);
+  cout << "Food taste (Good/Avg/Bad): ";
+  cin.ignore();
+  getline(cin, taste);
 
-    cout << "Food Temperature (Highly Satisfied/Satisfied/Neutral/Dissatisifed): ";
-    cin.ignore();
-    getline(cin, temp);
+  cout << "Food temperature (Good/Avg/Bad): ";
+  cin.ignore();
+  getline(cin, temp);
 
-    cout << "Speed of Service (Highly Satisfied/Satisfied/Neutral/Dissatisifed): ";
-    cin.ignore();
-    getline(cin, speed);
+  cout << "Speed of service (Good/Avg/Bad): ";
+  cin.ignore();
+  getline(cin, speed);
 
-    cout << "Staff Friendliness (Highly Satisfied/Satisfied/Neutral/Dissatisifed): ";
-    cin.ignore();
-    getline(cin, staff);
+  cout << "Staff friendliness (Good/Avg/Bad): ";
+  cin.ignore();
+  getline(cin, staff);
 
-    cout << "Cleanliness (Highly Satisfied/Satisfied/Neutral/Dissatisifed): ";
-    cin.ignore();
-    getline(cin, clean);
+  cout << "Cleanliness (Good/Avg/Bad): ";
+  cin.ignore();
+  getline(cin, clean);
 
-    ofstream feedbackFile("customer_feedback.txt", ios::app); // saving the feedback using append
-    if (feedbackFile) {
-        feedbackFile << "Customer ID: " << customerId << endl;
-        feedbackFile << "--------------------------------------" << endl;
-        feedbackFile << "Waiter Name: " << waiter_name << endl;
-        feedbackFile << "Taste: " << taste << endl;
-        feedbackFile << "Temperature: " << temp << endl;
-        feedbackFile << "Speed of Service: " << speed << endl;
-        feedbackFile << "Staff Friendliness: " << staff << endl;
-        feedbackFile << "--------------------------------------" << endl;
-        feedbackFile.close();
-        cout << "Thank you for your feedback!" << endl;
-    } else {
-        cout << "Error saving feedback." << endl;
-    }
+  ofstream feedbackFile("customer_feedback.txt", ios::app); // Open file in append mode
+
+  if (!feedbackFile) {
+    cout << "Error opening feedback file." << endl;
+    return;
+  }
+
+  // Write feedback data
+  feedbackFile << "Customer ID: " << customerId << endl;
+  feedbackFile << "--------------------------------------" << endl;
+  feedbackFile << "Waiter Name: " << waiterName << endl;
+  feedbackFile << "Taste: " << taste << endl;
+  feedbackFile << "Temperature: " << temp << endl;
+  feedbackFile << "Speed of Service: " << speed << endl;
+  feedbackFile << "Staff Friendliness: " << staff << endl;
+  feedbackFile << "Cleanliness: " << clean << endl;
+  feedbackFile << "--------------------------------------" << endl;
+
+  feedbackFile.close();
+
+  cout << "Thank you for your feedback!" << endl;
 }
 
 void GenerateInvoice() {
+
   int ID;
+  string fileName = "invoice.txt";
 
   cout << "Enter the order ID for which you want to generate an invoice: ";
   cin >> ID;
@@ -282,17 +369,12 @@ void GenerateInvoice() {
   for (int i = 0; i < order_nums; i++) {
     if (orders[i].orderId == ID) { // basic searching using ID again
       found = true;
-
-
+      
       char saveInvoice;
       cout << "Do you want to save the invoice for order ID " << ID << " to a file? (Y/N): ";
       cin >> saveInvoice;
 
       if (saveInvoice == 'y' || saveInvoice == 'Y') {
-        string fileName;
-        cout << "Enter the filename to save the invoice: ";
-        cin >> fileName;
-
         ofstream outputFile(fileName);
 
         if (!outputFile.is_open()) {
@@ -307,13 +389,13 @@ void GenerateInvoice() {
         outputFile << "Ordered Items:" << endl;
 
         for (int j = 0; j < orders[i].quantity; j++) {
-          outputFile << " - " << orders[i].ordered_items << endl;
+          outputFile << " - " << orders[i].items_ordered << endl;
         }
 
         outputFile << "---------------------------" << endl;
         outputFile << "Quantity: " << orders[i].quantity << endl;
-        outputFile << "Price per item: " << orders[i].price << " Rs" << endl;
-        outputFile << "Total Cost: " << orders[i].total_cost << " Rs" << endl;
+        outputFile << "Price per item Rs: " << orders[i].price << endl;
+        outputFile << "Total Cost Rs: " << orders[i].total_cost <<  endl;
         outputFile << "---------------------------" << endl;
 
         outputFile.close();
@@ -330,8 +412,74 @@ void GenerateInvoice() {
   CustomerSatisfaction(ID);
 }
 
+void ExitProgram(){
+  ofstream outputFile; // rewrting the data back to the file
+  outputFile.open("orders.txt", ios::out);
+
+  if (!outputFile.is_open()) {
+    cout << "Error opening file." << endl;
+    return;
+  }
+
+  // Write only non-empty orders to the file
+  for (int i = 0; i < order_nums; i++) {
+    outputFile << "Order ID: " << orders[i].orderId << "\n";
+    outputFile << "Customer Name: " << orders[i].customer_name << "\n";
+    outputFile << "Items Ordered: " << orders[i].items_ordered << "\n";
+    outputFile << "Quantity: " << orders[i].quantity << "\n";
+    outputFile << "Total Price in PKR: " << orders[i].total_cost << " Rs" << "\n";
+    outputFile << "Assigned Table: " << occupied_tables << "\n\n";
+  }
+  outputFile.close();
+  cout<<"Exiting Program..."<<endl;
+  exit(0);
+}
+
+void SearchOrders() {
+
+  string keyword;
+  cout<<"Enter The Keyword That You Want To Find: ";
+  cin>>keyword;
+
+  bool found = false; 
+  for (int i = 0; i < order_nums; ++i) {
+    
+    if (orders[i].customer_name.find(keyword) != string::npos || orders[i].items_ordered.find(keyword) != string::npos ||
+        to_string(orders[i].total_cost).find(keyword) != string::npos) {
+     
+      found = true;
+      
+      cout << "Order ID: " << orders[i].orderId << endl;
+      cout << "Customer Name: " << orders[i].customer_name << endl;
+      cout << "Items Ordered: " << orders[i].items_ordered << endl;
+      cout << "Quantity: " << orders[i].quantity << endl;
+      cout << "Price: Rs" << orders[i].price << endl;
+      cout << "Total Cost: Rs" << orders[i].total_cost << endl;
+      cout << "Assigned Table: " << orders[i].assignedTableId << endl << endl;
+    }
+  }
+  
+  if (!found) {
+    cout << "No orders found matching the keyword '" << keyword << "'." << endl;
+    return;
+  }
+}
+
 int main() {
     int option;
+
+    string line;
+
+      ifstream inputFile("orders.txt");
+  if (inputFile) {
+      while (!inputFile.eof()) {
+        inputFile >> line;
+      }
+       inputFile.close();
+  } 
+    else {
+      cout<<"Unable to Open The File"<<endl;
+  }
 
     do {
         cout<<"----------------------" << endl;
@@ -341,7 +489,8 @@ int main() {
         cout<<"3. Cancel An Order" << endl;
         cout<<"4. Show All The Orders" << endl;
         cout<<"5. Print Invoice For an Order" << endl;
-        cout<<"6. Exit" << endl;
+        cout<<"6. Search An Order" << endl;
+        cout<<"7. Exit" << endl;
 
         cout<<"----------------------" << endl;
 
@@ -365,7 +514,10 @@ int main() {
                 GenerateInvoice();
                 break;
             case 6:
-                cout << "Exiting program." << endl;
+                SearchOrders();
+                break;
+            case 7:
+                ExitProgram();
                 break;
             default:
                 cout << "Invalid option. Please try again." << endl;
@@ -373,7 +525,7 @@ int main() {
         }
 
         cout << "\n";
-    } while (option != 6);
+    } while (option != 7);
 
     return 0;
 }
