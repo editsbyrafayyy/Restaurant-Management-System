@@ -86,7 +86,7 @@ void ModifyOrder() {
   int ID;
   bool found = false;
 
-  cout << "Enter customer ID to modify order: ";
+  cout << "Enter order ID to modify: ";
   string input_id;
   cin >> input_id;
 
@@ -97,57 +97,73 @@ void ModifyOrder() {
     return;
   }
 
-  ofstream outputFile;
-  outputFile.open("orders.txt", ios::out | ios::ate);
+  // Create a temporary list to store updated orders
+  Orders updatedOrders[max_orders];
+  int updated_order_num = 0;
 
-  if (!outputFile.is_open()) {
-    cout << "Error opening file." << endl;
-    return;
-  }
-
-  for (int i = 0; i < order_nums; i++) {
+  for (int i = 0; i < order_nums; ++i) {
     if (orders[i].orderId == ID) {
       found = true;
 
-      cout<<endl;
+      // Get updated information
+      cout << endl;
       cout << "The Order Has Been Found. What Changes Do You Want to Make?: " << endl;
       cout << "1. Customer Name" << endl;
       cout << "2. Items Ordered" << endl;
       cout << "3. Quantity" << endl;
 
       int choice;
-      cout<<"Enter: ";
+      cout << "Enter: ";
       cin >> choice;
 
       switch (choice) {
-        case 1:
-          cout << "Enter new customer name: ";
-          cin.ignore();
-          getline(cin, orders[i].customer_name);
-          break;
-        case 2:
-          cout << "Enter new items ordered: ";
-          cin.ignore();
-          getline(cin, orders[i].ordered_items);
-          break;
-        case 3:
-          cout << "Enter new quantity: ";
-          cin >> orders[i].quantity;
-          break;
-        default:
-          cout << "Invalid choice." << endl;
-          break;
+      case 1:
+        cout << "Enter new customer name: ";
+        cin.ignore();
+        getline(cin, orders[i].customer_name);
+        break;
+      case 2:
+        cout << "Enter new items ordered: ";
+        cin.ignore();
+        getline(cin, orders[i].ordered_items);
+        break;
+      case 3:
+        cout << "Enter new quantity: ";
+        cin >> orders[i].quantity;
+        orders[i].total_cost = orders[i].price * orders[i].quantity; // recalculate total cost
+        break;
+      default:
+        cout << "Invalid choice." << endl;
+        break;
       }
     }
 
-    outputFile << "Order ID: " << orders[i].orderId << "\n";
-    outputFile << "Customer Name: " << orders[i].customer_name << "\n";
-    outputFile << "Items Ordered: " << orders[i].ordered_items << "\n";
-    outputFile << "Quantity: " << orders[i].quantity << "\n";
-    outputFile << "Total Price in PKR: " << orders[i].total_cost << " Rs" << "\n\n";
+    // Add orders to the temporary list
+    updatedOrders[updated_order_num++] = orders[i];
+  }
+
+  // Rewrite the entire file with updated orders
+  ofstream outputFile;
+  outputFile.open("orders.txt", ios::out | ios::trunc);
+
+  if (!outputFile.is_open()) {
+    cout << "Error opening file." << endl;
+    return;
+  }
+
+  for (int i = 0; i < updated_order_num; ++i) {
+    outputFile << "Order ID: " << updatedOrders[i].orderId << "\n";
+    outputFile << "Customer Name: " << updatedOrders[i].customer_name << "\n";
+    outputFile << "Items Ordered: " << updatedOrders[i].ordered_items << "\n";
+    outputFile << "Quantity: " << updatedOrders[i].quantity << "\n";
+    outputFile << "Total Price in PKR: " << updatedOrders[i].total_cost << " Rs" << "\n";
   }
 
   outputFile.close();
+
+  // Update order_nums to reflect the changes
+  order_nums = updated_order_num;
+
   cout << "Modifications Have Been Made Successfully" << endl;
 
   if (!found) {

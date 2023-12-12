@@ -1,14 +1,42 @@
-Order ID: 1
-Customer Name: ali
-Items Ordered: job
-Quantity: 2
-Total Price in PKR: 46 Rs
-Assigned Table: 2
+Order ID: 4
+Customer Name: pooo
+Items Ordered: eew
+Quantity: 23
+Total Cost (Rs): 0
+Assigned Table: 4
 
 Order ID: 2
-Customer Name: joe
-Items Ordered: wad
-Quantity: 3
-Total Price in PKR: 333 Rs
+Customer Name: rafayyyboiii
+Items Ordered: fekl
+Quantity: 2
+Total Cost (Rs): 0
 Assigned Table: 2
+
+Order ID: 6
+Customer Name: hahahaha
+Items Ordered: hehehe
+Quantity: 23
+Total Cost (Rs): 989
+Assigned Table: 3
+
+Order ID: -1
+Customer Name: 
+Items Ordered: 
+Quantity: 0
+Total Cost (Rs): 0
+Assigned Table: 1
+
+Order ID: 2
+Customer Name: 
+Items Ordered: 
+Quantity: 0
+Total Cost (Rs): 0
+Assigned Table: 1
+
+Order ID: -1
+Customer Name: 
+Items Ordered: 
+Quantity: 0
+Total Cost (Rs): 0
+Assigned Table: 1
 

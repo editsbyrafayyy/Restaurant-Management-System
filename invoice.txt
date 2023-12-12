@@ -1,12 +1,12 @@
 ---------------------------
-Order ID: 1
-Customer Name: ali
+Order ID: 2
+Customer Name: rafayyyboiii
 ---------------------------
 Ordered Items:
- - job
- - job
+ - fekl
+ - fekl
 ---------------------------
 Quantity: 2
-Price per item Rs: 23
-Total Cost Rs: 46
+Price per item Rs: 0
+Total Cost Rs: 0
 ---------------------------
