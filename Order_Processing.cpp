@@ -133,7 +133,7 @@ orders[order_nums++] = new_order;
   outputFile.close();
 
   // Confirmation message
-  cout << "Your Order Has Been Successfully Created! Table " << occupied_tables << " has been assigned." << endl;
+  cout << "Your Order Has Been Successfully Created! Table " << assignedTable + 1 << " has been assigned." << endl;
 }
 
 void ModifyOrder() {
