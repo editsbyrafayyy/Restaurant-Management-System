@@ -19,67 +19,110 @@ struct Orders { // using structures instead of implementing OOP
 Orders orders[max_orders]; // Array to store orders
 int order_nums = 0; // Number of orders 
 
-void CreateOrder() { // function to create the order
+void CreateOrder() { // first option on the menu (creates the order yeye)
+  
+  ofstream outputFile("orders.txt", ios::app);
 
-    if (order_nums >= max_orders) { // to ensure that the orders don't exceed max 
-        cout << "Max Orders Exceeded" << endl;
-        return;
-    }
+  if (!outputFile.is_open()) {
+    cout << "Error opening file." << endl;
+    return;
+  }
+  
+  if (order_nums >= max_orders) {
+    cout << "Max Orders Exceeded" << endl;
+    return;
+  }
 
-    Orders new_order; //declaring new structure var 
+  Orders new_order;
 
-    cout << "Enter The Order ID: ";
-    string input_id;
-    cin >> input_id;
+  new_order.orderId = order_nums + 1;
+  order_nums++;
 
-    new_order.orderId = stoi(input_id);
+// alot of validation basically
 
-    cout << "Enter The Customer Name: ";
-    cin.ignore(); // needed for getline for some reason hmmm.
+  // int input_id;
+  // do { // it is for ID validation 
+  //   cout << "Enter Order ID: ";
+  //   cin >> input_id;
+  //   if (cin.fail()) { // cin.fail here returns true if a letter, comma or special char is entered, so just to make sure the correct input is taken
+  //     cout << "Invalid input. Please enter a number: ";
+  //     cin.clear(); // (not compul but clears the buffer of the "error state" so an input can be taken again)
+  //     cin.ignore(); // makes sures that the "wrong input" is removed from the buffer, makes sure koi problem na ho when taking input again)
+  //   }
+  // } while (input_id <= 0);
+
+  //new_order.orderId = input_id; // stores that ID into the new stucture variable (sarra data store ho jata in one var iss tarha)
+
+  string customer_name; 
+    cout << "Enter Customer Name: ";
+    getline(cin, new_order.customer_name); 
+
+  while (new_order.customer_name.empty()){ // checks if the customer name entered is empty or not (if it is then takes input)
     getline(cin, new_order.customer_name);
-
-    cout << "Enter The Items Ordered: ";
-    getline(cin, new_order.ordered_items);
-
-    cout << "Enter The quantity: ";
-    cin >> new_order.quantity;
-
-    cout << "Enter The Price: ";
-    cin >> new_order.price;
-
-    new_order.total_cost = new_order.price * new_order.quantity;
-
-    orders[order_nums++] = new_order;
-    // order_nums++; // incrementing order nums
-
-    cout << "Your Order Has Been Successfully Created LESSSGOOOO!" << endl;
-
-    //adding the order to a file
-
-        if (order_nums == 0) { // if no orders exist
-        cout << "No Orders Are Available." << endl;
-        return;
+      if (new_order.customer_name.empty()) { // if it left empty asks for input again
+      cout << "Customer name cannot be empty. Please enter a name: ";
     }
+  }
 
-    ofstream outputFile;
-    outputFile.open("orders.txt", ios::app);
-
-    if (!outputFile.is_open()) {
-        cout << "Error opening file." << endl;
-        return;
+  string items_ordered;
+  do { // it is for ordered items validation 
+    cout << "Enter Ordered Items: ";
+    getline(cin, new_order.items_ordered);
+    if (new_order.items_ordered.empty()) { // follows the same idea as customer name just with do while lol
+      cout << "Items ordered cannot be empty. Please enter items: ";
     }
+  } while (new_order.items_ordered.empty());
 
-    for (int i = order_nums - 1; i < order_nums; i++) {
-        outputFile << "Order ID: " << orders[i].orderId << "\n";
-        outputFile << "Customer Name: " << orders[i].customer_name << "\n";
-        outputFile << "Items Ordered: " << orders[i].ordered_items << "\n";
-        outputFile << "Quantity: " << orders[i].quantity << "\n";
-        outputFile << "Total Price in PKR: " << orders[i].total_cost <<" Rs"<< "\n\n";
-    }
+  
+do {
+  cout << "Enter Quantity: ";
+  while (!(cin >> new_order.quantity) || new_order.quantity <= 0) { // jab tak conditions true nahi hotein it keeps on asking for input ("!" reverses the conditions to check)
+    cout << "Invalid input. Please enter a positive number: ";
+    cin.clear();
+    cin.ignore();
+  }
+} while (new_order.quantity <= 0);
 
-    outputFile.close();
+  do {
+  cout << "Enter Price: ";
+  cin >> new_order.price;
+  if (cin.fail() || new_order.price <= 0.0) {
+    cout << "Invalid input. Please enter a positive number: ";
+    cin.clear();
+    cin.ignore();
+  }
+} while (new_order.price <= 0.0);
 
-    cout << "Orders written to file successfully" << endl;
+new_order.total_cost = new_order.price * new_order.quantity; // calcs the total cost
+
+int assignedTable = -1; //sets kay no tables are assigned
+for (int i = 0; i < max_tables && assignedTable == -1; i++) { 
+  if (!tables[i].orderId) { // looks for table available
+    assignedTable = i;
+  }
+}
+
+if (assignedTable == -1) {
+  cout << "There Are No Tables Available Right Now, Business is Booming ;)" << endl;
+  return;
+}
+
+tables[assignedTable].orderId = new_order.orderId; // stores the ID of the new order in the table's var 
+new_order.assignedTableId = assignedTable;
+
+orders[order_nums++] = new_order;
+
+  outputFile << "Order ID: " << new_order.orderId << "\n";
+  outputFile << "Customer Name: " << new_order.customer_name << "\n";
+  outputFile << "Items Ordered: " << new_order.items_ordered << "\n";
+  outputFile << "Quantity: " << new_order.quantity << "\n";
+  outputFile << "Price: " << new_order.price << " Rs"<< "\n";
+  outputFile << "Total Cost: " << new_order.total_cost << " Rs"<< "\n";
+  outputFile << "Assigned Table: " << assignedTable + 1 << "\n\n";
+  outputFile.close();
+
+  // Confirmation message
+  cout << "Your Order Has Been Successfully Created! Table " << assignedTable + 1 << " has been assigned." << endl;
 }
 
 void ModifyOrder() {

@@ -49,20 +49,23 @@ void CreateOrder() { // first option on the menu (creates the order yeye)
 
   Orders new_order;
 
+  new_order.orderId = order_nums + 1;
+  order_nums++;
+
 // alot of validation basically
 
-  int input_id;
-  do { // it is for ID validation 
-    cout << "Enter Order ID: ";
-    cin >> input_id;
-    if (cin.fail()) { // cin.fail here returns true if a letter, comma or special char is entered, so just to make sure the correct input is taken
-      cout << "Invalid input. Please enter a number: ";
-      cin.clear(); // (not compul but clears the buffer of the "error state" so an input can be taken again)
-      cin.ignore(); // makes sures that the "wrong input" is removed from the buffer, makes sure koi problem na ho when taking input again)
-    }
-  } while (input_id <= 0);
+  // int input_id;
+  // do { // it is for ID validation 
+  //   cout << "Enter Order ID: ";
+  //   cin >> input_id;
+  //   if (cin.fail()) { // cin.fail here returns true if a letter, comma or special char is entered, so just to make sure the correct input is taken
+  //     cout << "Invalid input. Please enter a number: ";
+  //     cin.clear(); // (not compul but clears the buffer of the "error state" so an input can be taken again)
+  //     cin.ignore(); // makes sures that the "wrong input" is removed from the buffer, makes sure koi problem na ho when taking input again)
+  //   }
+  // } while (input_id <= 0);
 
-  new_order.orderId = input_id; // stores that ID into the new stucture variable (sarra data store ho jata in one var iss tarha)
+  //new_order.orderId = input_id; // stores that ID into the new stucture variable (sarra data store ho jata in one var iss tarha)
 
   string customer_name; 
     cout << "Enter Customer Name: ";
@@ -135,6 +138,7 @@ orders[order_nums++] = new_order;
   // Confirmation message
   cout << "Your Order Has Been Successfully Created! Table " << assignedTable + 1 << " has been assigned." << endl;
 }
+
 
 void ModifyOrder() {
   int orderId;
@@ -460,29 +464,6 @@ void GenerateInvoice() {
   
 }
 
-void ExitProgram() {
-  ofstream outputFile("orders.txt", ios::out | ios::trunc); // exits and updates everything 
-
-  if (!outputFile.is_open()) {
-    cerr << "Error opening file." << endl;
-    return;
-  }
-
-  for (int i = 0; i < order_nums; ++i) {
-    outputFile << "Order ID: " << orders[i].orderId << endl;
-    outputFile << "Customer Name: " << orders[i].customer_name << endl;
-    outputFile << "Items Ordered: " << orders[i].items_ordered << endl;
-    outputFile << "Quantity: " << orders[i].quantity << endl;
-    outputFile << "Total Cost (Rs): " << orders[i].total_cost << endl;
-    outputFile << "Assigned Table: " << (orders[i].assignedTableId + 1) << endl << endl;
-  }
-
-  outputFile.close();
-
-  cout << "Exiting Program..." << endl;
-  exit(0);
-}
-
 void SearchOrders() {
 
   string keyword;
@@ -597,7 +578,6 @@ bool readDataFromFile(const string& filePath, Orders orders[], int& order_nums, 
     }
   }
 
-  // Update table information
   for (int i = 0; i < order_nums; ++i) {
     if (orders[i].assignedTableId > -1) {
       int tableIndex = orders[i].assignedTableId;
@@ -613,24 +593,51 @@ bool readDataFromFile(const string& filePath, Orders orders[], int& order_nums, 
   return true;
 }
 
+void ExitProgram() {
+  ofstream outputFile("orders.txt", ios::out | ios::trunc); // exits and updates everything 
+
+  if (!outputFile.is_open()) {
+    cerr << "Error opening file." << endl;
+    return;
+  }
+
+  for (int i = 0; i < order_nums; ++i) {
+    outputFile << "Order ID: " << orders[i].orderId << endl;
+    outputFile << "Customer Name: " << orders[i].customer_name << endl;
+    outputFile << "Items Ordered: " << orders[i].items_ordered << endl;
+    outputFile << "Quantity: " << orders[i].quantity << endl;
+    outputFile << "Total Cost (Rs): " << orders[i].total_cost << endl;
+    outputFile << "Assigned Table: " << (orders[i].assignedTableId + 1) << endl << endl;
+  }
+
+  outputFile.close();
+
+  cout << "Exiting Program..." << endl;
+  exit(0);
+}
+
+
 int main() {
   int option;
 
   readDataFromFile("orders.txt", orders, order_nums, tables, occupied_tables); // before exexuting the program reads the file
 
-  do {
-    cout << "----------------------" << endl; // the main menu
+  do { // this was kafi uneccesary but looks cool (totally didnt spend way too much time aligning everything)
+    cout << "\t-┌───────────────────────────────────────┐-" << endl;
+    cout << "-----= \t│      Restaurant Management System       │  =-----" << endl;
+    cout << "\t-└───────────────────────────────────────┘-" << endl;
 
-    cout << "1. Create A New Order" << endl;
-    cout << "2. Modify A Existing Order" << endl;
-    cout << "3. Cancel An Order" << endl;
-    cout << "4. Show All The Orders" << endl;
-    cout << "5. Print Invoice For an Order" << endl;
-    cout << "6. Search An Order" << endl;
-    cout << "7. Exit" << endl;
+    cout << "\t    ┌───────────────────────────────┐" << endl;
+    cout << "\t    │ 1. Create a New Order         │" << endl;
+    cout << "\t    │ 2. Modify an Existing Order   │" << endl;
+    cout << "\t    │ 3. Cancel an Order            │" << endl;
+    cout << "\t    │ 4. Show All Orders            │" << endl;
+    cout << "\t    │ 5. Print Invoice for an Order │" << endl;
+    cout << "\t    │ 6. Search for an Order        │" << endl;
+    cout << "\t    │ 7. Exit                       │" << endl;
+    cout << "\t    └───────────────────────────────┘" << endl;
 
-    cout << "----------------------" << endl;
-
+    cout<<endl;
     cout << "Enter your option: ";
     cin >> option;
 
