@@ -1,0 +1,48 @@
+--------------------------------------
+Waiter Name: Soban Ali
+Speed of Service: good
+Waiter's Attitude: good
+Cleanliness: bad
+--------------------------------------
+--------------------------------------
+Waiter Name: Ahmed Qureshi
+Speed of Service: good
+Waiter's Attitude: avg
+Cleanliness: bad
+--------------------------------------
+--------------------------------------
+Waiter Name: Soban Ali
+Speed of Service: good
+Waiter's Attitude: good
+Cleanliness: avg
+--------------------------------------
+--------------------------------------
+Waiter Name: Soban Ali
+Speed of Service: good
+Waiter's Attitude: good
+Cleanliness: good
+--------------------------------------
+--------------------------------------
+Waiter Name: Ahmed Qureshi
+Speed of Service: bad
+Waiter's Attitude: bad
+Cleanliness: bad
+--------------------------------------
+--------------------------------------
+Waiter Name: Soban Ali
+Speed of Service: good
+Waiter's Attitude: good
+Cleanliness: good
+--------------------------------------
+--------------------------------------
+Waiter Name: Soban Ali
+Speed of Service: good
+Waiter's Attitude: good
+Cleanliness: good
+--------------------------------------
+--------------------------------------
+Waiter Name: Soban Ali
+Speed of Service: good
+Waiter's Attitude: good
+Restaurant's Cleanliness: bad
+--------------------------------------

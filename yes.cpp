@@ -19,109 +19,122 @@ struct Orders { // using structures instead of implementing OOP
 Orders orders[max_orders]; // Array to store orders
 int order_nums = 0; // Number of orders 
 
-void CreateOrder() { // first option on the menu (creates the order yeye)
-  
+void CreateOrder() {
+  // Open output file
   ofstream outputFile("orders.txt", ios::app);
-
   if (!outputFile.is_open()) {
     cout << "Error opening file." << endl;
     return;
   }
-  
+
+  // Check order limit
   if (order_nums >= max_orders) {
     cout << "Max Orders Exceeded" << endl;
     return;
   }
 
+  // Create new order
   Orders new_order;
-
   new_order.orderId = order_nums + 1;
   order_nums++;
 
-// alot of validation basically
+  int input_id;
+  do { // it is for ID validation 
+    cout << "Enter Order ID: ";
+    cin >> input_id;
+    if (cin.fail()) { // cin.fail here returns true if a letter, comma or special char is entered, so just to make sure the correct input is taken
+      cout << "Invalid input. Please enter a number: ";
+      cin.clear(); // (not compul but clears the buffer of the "error state" so an input can be taken again)
+      cin.ignore(); // makes sures that the "wrong input" is removed from the buffer, makes sure koi problem na ho when taking input again)
+    }
+  } while (input_id <= 0);
+  new_order.orderId = input_id;
 
-  // int input_id;
-  // do { // it is for ID validation 
-  //   cout << "Enter Order ID: ";
-  //   cin >> input_id;
-  //   if (cin.fail()) { // cin.fail here returns true if a letter, comma or special char is entered, so just to make sure the correct input is taken
-  //     cout << "Invalid input. Please enter a number: ";
-  //     cin.clear(); // (not compul but clears the buffer of the "error state" so an input can be taken again)
-  //     cin.ignore(); // makes sures that the "wrong input" is removed from the buffer, makes sure koi problem na ho when taking input again)
-  //   }
-  // } while (input_id <= 0);
-
-  //new_order.orderId = input_id; // stores that ID into the new stucture variable (sarra data store ho jata in one var iss tarha)
-
-  string customer_name; 
-    cout << "Enter Customer Name: ";
-    getline(cin, new_order.customer_name); 
-
-  while (new_order.customer_name.empty()){ // checks if the customer name entered is empty or not (if it is then takes input)
+  // Get customer name and validate
+  getline(cin, new_order.customer_name);
+  while (new_order.customer_name.empty()) {
+    cout << "Please enter a name: ";
     getline(cin, new_order.customer_name);
-      if (new_order.customer_name.empty()) { // if it left empty asks for input again
-      cout << "Customer name cannot be empty. Please enter a name: ";
-    }
   }
 
-  string items_ordered;
-  do { // it is for ordered items validation 
-    cout << "Enter Ordered Items: ";
-    getline(cin, new_order.items_ordered);
-    if (new_order.items_ordered.empty()) { // follows the same idea as customer name just with do while lol
-      cout << "Items ordered cannot be empty. Please enter items: ";
-    }
-  } while (new_order.items_ordered.empty());
+  // Initialize variables
+  vector<int> orderedItems;
+  new_order.quantity = 1; // Default quantity
 
-  
-do {
-  cout << "Enter Quantity: ";
-  while (!(cin >> new_order.quantity) || new_order.quantity <= 0) { // jab tak conditions true nahi hotein it keeps on asking for input ("!" reverses the conditions to check)
-    cout << "Invalid input. Please enter a positive number: ";
-    cin.clear();
-    cin.ignore();
-  }
-} while (new_order.quantity <= 0);
-
+  // Loop for entering item indexes
   do {
-  cout << "Enter Price: ";
-  cin >> new_order.price;
-  if (cin.fail() || new_order.price <= 0.0) {
+  cout << "Enter Item Number (1-20, 0 to finish): ";
+  int itemIndex;
+  while (!(cin >> itemIndex) || itemIndex < 0 || itemIndex > 20) {
+    cout << "Invalid input. Please enter a number between 1 and 20: ";
+    cin.clear();
+    cin.ignore();
+  }
+
+  if (itemIndex == 0) break; // exit loop on 0
+
+  // Ask for quantity for this item
+  cout << "Enter Quantity: ";
+  while (!(cin >> new_order.quantity) || new_order.quantity <= 0) {
     cout << "Invalid input. Please enter a positive number: ";
     cin.clear();
     cin.ignore();
   }
-} while (new_order.price <= 0.0);
 
-new_order.total_cost = new_order.price * new_order.quantity; // calcs the total cost
+  orderedItems.push_back(itemIndex - 1); // add valid index
+} while (true);
 
-int assignedTable = -1; //sets kay no tables are assigned
-for (int i = 0; i < max_tables && assignedTable == -1; i++) { 
-  if (!tables[i].orderId) { // looks for table available
-    assignedTable = i;
+  // Initialize total price and iterate through ordered items
+  double totalPrice = 0.0;
+  for (int itemIndex : orderedItems) {
+    // Check if valid index
+    if (itemIndex < 0 || itemIndex >= loadedMenu.size()) {
+      cout << "Error: Invalid item index." << endl;
+      outputFile.close();
+      return; // Order creation failed
+    }
+
+    // Add price based on item index and quantity
+    totalPrice += loadedMenu[itemIndex].getPrice() * new_order.quantity;
   }
-}
 
-if (assignedTable == -1) {
-  cout << "There Are No Tables Available Right Now, Business is Booming ;)" << endl;
-  return;
-}
+  // Set total cost
+  new_order.total_cost = totalPrice;
 
-tables[assignedTable].orderId = new_order.orderId; // stores the ID of the new order in the table's var 
-new_order.assignedTableId = assignedTable;
+  // Assign table and update tables array
+  int assignedTable = -1;
+  for (int i = 0; i < max_tables && assignedTable == -1; i++) {
+    if (!tables[i].orderId) {
+      assignedTable = i;
+      tables[i].orderId = new_order.orderId;
+      new_order.assignedTableId = assignedTable;
+    }
+  }
 
-orders[order_nums++] = new_order;
+  // Handle no available tables
+  if (assignedTable == -1) {
+    cout << "There Are No Tables Available Right Now, Business is Booming ;)" << endl;
+    outputFile.close();
+    return;
+  }
+
+  // Add order to orders array and save to file
+  orders[order_nums++] = new_order;
 
   outputFile << "Order ID: " << new_order.orderId << "\n";
   outputFile << "Customer Name: " << new_order.customer_name << "\n";
-  outputFile << "Items Ordered: " << new_order.items_ordered << "\n";
+  outputFile << "Items Ordered: ";
+  for (int itemIndex : orderedItems) {
+    const MenuItem& item = loadedMenu[itemIndex]; 
+    outputFile << item.getName();
+  }
+  outputFile.seekp(-2, std::ios::cur);
+  outputFile << "\n";
   outputFile << "Quantity: " << new_order.quantity << "\n";
-  outputFile << "Price: " << new_order.price << " Rs"<< "\n";
-  outputFile << "Total Cost: " << new_order.total_cost << " Rs"<< "\n";
+  outputFile << "Total Cost: " << new_order.total_cost << " Rs" << "\n";
   outputFile << "Assigned Table: " << assignedTable + 1 << "\n\n";
   outputFile.close();
 
-  // Confirmation message
   cout << "Your Order Has Been Successfully Created! Table " << assignedTable + 1 << " has been assigned." << endl;
 }
 
@@ -333,61 +346,44 @@ void CustomerSatisfaction(int customerId) {
 }
 
 void GenerateInvoice() {
-  int ID;
 
+  int ID;
+  bool found = false;
   cout << "Enter the order ID for which you want to generate an invoice: ";
   cin >> ID;
 
-  bool found = false;
-
   for (int i = 0; i < order_nums; i++) {
-    if (orders[i].orderId == ID) { // basic searching using ID again
+    if (orders[i].orderId == ID) {
       found = true;
-      
-      char saveInvoice;
-      cout << "Do you want to save the invoice for order ID " << ID << " to a file? (Y/N): ";
-      cin >> saveInvoice;
 
-      if (saveInvoice == 'y' || saveInvoice == 'Y') {
-        string fileName;
-        cout << "Enter the filename to save the invoice: ";
-        cin >> fileName;
+      cout << "-----------------------------------" << endl;
+      cout << "Order ID: " << orders[i].orderId << endl;
+      cout << "Customer Name: " << orders[i].customer_name << endl;
+      cout << "-----------------------------------" << endl;
 
-        ofstream outputFile(fileName);
-
-        if (!outputFile.is_open()) {
-          cout << "Error opening file." << endl;
-          return;
+      cout << "Ordered Items:" << endl;
+      for (const auto& item : loadedMenu) {
+        int count = std::count(orders[i].items_ordered.begin(), orders[i].items_ordered.end(), item.getName());
+        if (count > 0) {
+          cout << " - " << item.getName() << " (" << count << ")" << endl;
         }
-
-        outputFile << "---------------------------" << endl; // invoice in the file
-        outputFile << "Order ID: " << orders[i].orderId << endl;
-        outputFile << "Customer Name: " << orders[i].customer_name << endl;
-        outputFile << "---------------------------" << endl;
-        outputFile << "Ordered Items:" << endl;
-
-        for (int j = 0; j < orders[i].quantity; j++) {
-          outputFile << " - " << orders[i].ordered_items << endl;
-        }
-
-        outputFile << "---------------------------" << endl;
-        outputFile << "Quantity: " << orders[i].quantity << endl;
-        outputFile << "Price per item: " << orders[i].price << " Rs" << endl;
-        outputFile << "Total Cost: " << orders[i].total_cost << " Rs" << endl;
-        outputFile << "---------------------------" << endl;
-
-        outputFile.close();
       }
+
+      cout << "-----------------------------------" << endl;
+      cout << "Quantity: " << orders[i].quantity << endl;
+      cout << "Price per item: Rs." << orders[i].price << endl;
+      cout << "Total Cost: Rs." << orders[i].total_cost << endl;
+      cout << "-----------------------------------" << endl;
+
+      CustomerSatisfaction(); 
+
       break;
     }
   }
 
   if (!found) {
     cout << "Order with ID " << ID << " not found." << endl;
-    return;
   }
-
-  CustomerSatisfaction(ID);
 }
 
 
