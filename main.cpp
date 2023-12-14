@@ -1,19 +1,168 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <algorithm>
+#include <ctime>
+
 using namespace std;
 
 
 //________________________________CONSTANTS____________________________
-const string filename = "hardees.txt";
+const string filename = "hardees.txt"; 
+const string filename2 = "employee.txt";
 //________________________________FUNCTION CALLS______________________
-void manageMenu();
+void manageMenu(); void manageEmployees();
 void displayOptions(int a);
 //_____________________________________________________________________
 
+class Employee {
+private: 
+	string name;
+	string position;
+	string contactinfo;
+	int salary;
+	double totalrating;
+	int orderscompleted;
+
+public:
+	//default constructor
+	Employee():name(""),position(""),contactinfo(""),salary(0),totalrating(0),orderscompleted(0){} 
+
+	//constructor
+	Employee(string name,string position,string contactInfo,int salary):
+		name(name),position(position),contactinfo(contactInfo),salary(salary),totalrating(0),orderscompleted(0){}
+
+	void dispEmpInfo() {
+		cout << endl << "Name: " << name;
+		cout << endl << "Position: " << position;
+		cout << endl << "Contact Info: " << contactinfo;
+		cout << endl << "Salary: " << salary;
+		cout << endl << "Rating: " << (totalrating>0) ? totalrating/orderscompleted:0 ; // this statement feels like a flex fr
+		cout << endl << "Orders Completed: " << orderscompleted;
+	}
+
+	string getName() {
+		return name;
+	}
+
+	string getPosition() {
+		return position;
+	}
+
+	string getContactInfo() {
+		return contactinfo;
+	}
+
+	int getSalary() {
+		return salary;
+	}
+
+	double getRating() {
+		return totalrating;
+	}
+
+	int getnumOrders() {
+		return orderscompleted;
+	}
+
+	void setName(string Name) {
+		name = Name;
+	}
+
+	void setPosition(string Position) {
+		position = Position;
+	}
+
+	void setSalary(int change) {
+		salary += change;
+	}
+
+	void setRating(double newrating){ 
+		totalrating += newrating;
+	}
+
+	void setContactInfo(string info) {
+		contactinfo = info;
+	}
+
+	void increaseOrdernum() {
+		orderscompleted++;
+	}
+
+	string serialize() const {
+		ostringstream oss;
+		oss << name << "|" << position << "|" << contactinfo << "|" << salary << "|" << totalrating << "|" << orderscompleted;
+		return oss.str();
+	}
+
+	// Deserialize employee data from a string
+	void deserialize(const string& serializedData) {
+		istringstream iss(serializedData);
+		getline(iss, name, '|');
+		getline(iss, position, '|');
+		getline(iss, contactinfo, '|');
+		iss >> salary;
+		iss.ignore();  
+		iss >> totalrating;
+		iss.ignore();
+		iss >> orderscompleted;
+	}
+
+	void setFromUserInput() {
+		cout << "Enter employee name: ";
+		getline(cin, name);
+
+		cout << "Enter employee position: ";
+		getline(cin, position);
+
+		cout << "Enter employee contact info: ";
+		getline(cin, contactinfo);
+
+		cout << "Enter employee salary: ";
+		cin >> salary;
+		cin.ignore();
+	}
+};
+
+void saveEmployeesToFile(vector<Employee>& employees, const string& filename) {
+	ofstream file(filename);
+
+	if (file.is_open()) {
+		for (const auto& emp : employees) {
+			file << emp.serialize() << '\n';
+		}
+		file.close();
+		cout << "Data saved to file: " << filename << endl;
+	}
+	else {
+		cout << "Error opening file: " << filename << endl;
+	}
+}
+
+// Deserialize employee data from a text file to vector
+void loadEmployeesFromFile(vector<Employee>& employees, const string& filename) {
+	ifstream file(filename);
+
+	if (file.is_open()) {
+		employees.clear();
+
+		string line;
+		while (getline(file, line)) {
+			Employee emp;
+			emp.deserialize(line);
+			employees.push_back(emp);
+		}
+
+		file.close();
+		cout << "Data loaded from file: " << filename << endl;
+	}
+	else {
+		cout << "Error opening file: " << filename << endl;
+	}
+}
+//____________________________________________________________________________________________________________________
 class MenuItem
 {
 private:
@@ -67,17 +216,17 @@ public:
 	}
 
 	string serialize() const {
-		return name + "*" + std::to_string(price) + "*" + description + "*" + (availaiblity ? "1" : "0") + "*" + category;
+		return name + "*" + to_string(price) + "*" + description + "*" + (availaiblity ? "1" : "0") + "*" + category;
 	}
 
-	void deserialize(const std::string serializedString) {
-		std::istringstream iss(serializedString);
+	void deserialize(const string serializedString) {
+		istringstream iss(serializedString);
 		getline(iss, name, '*');
 		iss >> price;
 		iss.ignore();
 		getline(iss, description, '*');
 
-		std::string availabilityStr;
+		string availabilityStr;
 		getline(iss, availabilityStr, '*');
 		availaiblity = (availabilityStr == "1");
 
@@ -116,7 +265,6 @@ vector<MenuItem> loadMenuItemsFromFile(const string& filename) {
 			items.push_back(item);
 		}
 		file.close();
-		cout << "Loaded Items Succesfully from file: " << filename << endl;
 	}
 	else {
 		cout << "Error: Unable to open file: " << filename << endl;
@@ -125,19 +273,26 @@ vector<MenuItem> loadMenuItemsFromFile(const string& filename) {
 }
 
 vector<MenuItem> loadedMenu; //declaring a global array
+vector<Employee> employees; //declaring second global array :(
 
 int main() {
-	vector<MenuItem> loadedMenu = loadMenuItemsFromFile(filename);
+	loadedMenu = loadMenuItemsFromFile(filename); // load first arr from file
+	loadEmployeesFromFile(employees,filename2); // load second array from file
+
 	cout << "Welcome to the resturant management system!" << endl;
 	while (true)
 	{
 		displayOptions(0);
-		int n;
-		cin >> n;
+		int n;  
+		cin >> n; 
 		cin.ignore();
 		if (n == 1)
 		{
 			manageMenu();
+		}
+		else if (n==3)
+		{
+			manageEmployees();
 		}
 		else if (n == 0)
 		{
@@ -168,13 +323,22 @@ void displayOptions(int a) {
 		cout << "4) Modidfy Item Details" << endl;
 		cout << "5) Exit Menu Managing and go back to Main Menu" << endl;
 	}
-	else if (a == 2) //Modifying Item details (subset of Managing Menu)
+	else if (a==2) //Modifying Item details (subset of Managing Menu)
 	{
 		cout << "1) Change Name" << endl;
 		cout << "2) Change Price" << endl;
 		cout << "3) Change Description" << endl;
 		cout << "4) Change Availaibility" << endl;
 		cout << "5) Change Category" << endl;
+	}
+	else if (a==3) // Manage employee options
+	{
+		cout << "1) List all employees" << endl;
+		cout << "2) Hire New employee" << endl;
+		cout << "3) Mark Attendance" << endl;
+		cout << "4) Check Attendance" << endl;
+		cout << "5) Fire Employee" << endl;
+		cout << "6) Exit Managing Employees and go back to Main Menu" << endl;
 	}
 }
 
@@ -201,7 +365,7 @@ void manageMenu() {
 			}
 			int n; cout << endl << "Enter 0 to go back to Main Menu or anyother number to Manage Resturant Menu: ";
 			cin >> n;
-			if (n == 0)
+			if (n==0)
 			{
 				break;
 			}
@@ -240,7 +404,7 @@ void manageMenu() {
 
 			cout << "New item added and saved to the menu file.\n";
 
-			int n;
+			int n; 
 			cout << endl << "Enter 0 to go back to Main Menu or anyother number to Manage Resturant Menu: ";
 			cin >> n;
 			if (n == 0)
@@ -373,6 +537,165 @@ void manageMenu() {
 		else
 		{
 			cout << "Error: Please choose from 1-5." << endl;
+		}
+	}
+}
+
+void manageEmployees() {
+	
+	system("cls");
+	while (true) {
+		cout << "-Manage Your Employees-" << endl;
+		displayOptions(3);
+		int option;
+		cout << endl << "Enter Your Option(number) : ";
+		cin >> option;
+		if (option == 1) // Display Employees
+		{
+			employees.clear();
+			loadEmployeesFromFile(employees, filename2);
+			for (Employee item : employees) {
+				item.dispEmpInfo();
+				cout << "____________________________" << endl;
+			}
+		}
+		else if (option == 2)   // Hire New employee
+		{
+			system("cls");
+			cout << "Congratulations on hiring new employee\n" << "Please enter the new employees details" << endl;
+			Employee newEmp;
+			newEmp.setFromUserInput(); //custom function that takes input from user and stores it to the object
+			employees.push_back(newEmp);
+			saveEmployeesToFile(employees, filename2);
+		}
+		else if (option == 3)   // Mark Attendance
+		{
+			ofstream outFile("attendance.txt",ios::app);
+			cout << "\nWARNING ATTENDANCE CAN NOT BE MODIFIED BE CARFEFUL\n\n";
+			if (outFile.is_open()) {
+				time_t now = time(0);
+				tm* currentDate = localtime(&now);
+
+				// Adding date to the file
+				outFile << (currentDate->tm_mday) << '/' << (currentDate->tm_mon + 1) << '/' << (currentDate->tm_year + 1900) << "|";
+
+				for (Employee emp : employees) {
+					char attendance;
+					cout << "Is " << emp.getName() << " present? (Y/N): ";
+					cin >> attendance;
+
+					// Converting to 1 for present, 0 for absent
+					int attendanceCode = (attendance == 'Y' || attendance == 'y') ? 1 : 0;
+
+					// Write to file in the format: EmployeeName|AttendanceCode+
+					outFile << emp.getName() << "|" << attendanceCode << "+";
+				}
+
+				outFile.close();
+				cout << "Attendance recorded and saved to attendance.txt.\n";
+			}
+			else {
+				cout << "Error opening file: attendance.txt\n";
+			}
+		}
+		else if (option == 4) // Reads Attendance
+		{
+			string inputDate;
+			cout << "Enter the date you want to check attendance of (dd/mm/yy): ";
+			cin >> inputDate;
+
+			// Validation checks are tiring ;(
+			while (true) {
+				cout << "Enter the date (dd/mm/yy): ";
+				cin >> inputDate;
+
+				if (inputDate.length() == 8) {
+					bool validFormat = true;
+					for (auto i = inputDate.begin(); i != inputDate.end(); ++i) {
+						if (!isdigit(*i) && (i == inputDate.begin() + 2 || i == inputDate.begin() + 5)) {
+							validFormat = false;
+							break;
+						}
+					}
+
+					if (validFormat) {
+						break; // Exit the loop if the input is in the correct format
+					}
+				}
+
+				cout << "Invalid date format. Please enter the date in dd/mm/yy format.\n";
+				cin.clear();    // Clear input buffer to handle invalid input
+				cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore remaining characters in the buffer
+			}
+
+			ifstream inFile("attendance.txt");
+			if (inFile.is_open()) {
+				string line;
+				while (getline(inFile, line)) {
+					// Extract date from the line
+					string currentDate = line.substr(0, 8);
+
+					// Check if the date matches the user input
+					if (currentDate == inputDate) {
+						cout << "Attendance for " << inputDate << ":\n";
+						// Display attendance for each employee
+						for (Employee emp : employees) {
+							size_t pos = line.find(emp.getName() + "|");
+							if (pos != string::npos) { // checks if this shit actually exists
+								int attendanceCode = line[pos + emp.getName().length() + 1] - '0';
+								cout << emp.getName() << ": " << (attendanceCode ? "Present" : "Absent") << endl;
+							}
+						}
+						return; // Found and displayed attendance for the specified date
+					}
+				}
+
+				cout << "No attendance found for the specified date.\n";
+				inFile.close();
+			}
+			else {
+				cout << "Error opening file: attendance.txt\n";
+			}
+		}
+		else if (option == 5) // Fire Employee
+		{
+			loadEmployeesFromFile(employees, filename2); 
+			cout << "\nWARNING, FIRING AN EMPLOYEE WILL DELETE ALL THEIR DATA INCLUDING ORDERS COMPLETED AND RATING\n";
+			int n = 1;
+			cout << "Choose an employee to fire by entering the number behind their name" << endl;
+			for (Employee emp : employees) {
+				cout << n++ << ") " << emp.getName() << endl;
+			}
+			cout << endl << "Enter number: ";
+			cin >> n;
+			n--;
+
+			if (n >= 1 && n <= (employees.size())) {
+				// GET FIRED LMAO SKILL ISSUE + RATIO XD
+				employees.erase(employees.begin() + n);
+
+				cout << "Employee fired successfully.\n";
+
+			}
+			else {
+				cout << "Invalid choice. No employee fired.\n"; //Validation check ;(
+			}
+
+		}
+		else if (option == 6) // Go back to main menu
+		{
+			break;
+		}
+		else
+		{
+			cout << "Please enter an integer between 1 to 6" << endl;
+		}
+
+		cout << endl << "Do you wish to continue managing employees (enter y) or not?(enter any char): ";
+		char opt; cin >> opt;
+		if (!(opt=='y' || opt=='Y'))
+		{
+			break;
 		}
 	}
 }
