@@ -1,6 +1,5 @@
 Ayesha Malik|Cashier|ayesha.malik@email.com|28000|3.5|110
-Hassan Ahmed|Kitchen Staff|hassan.ahmed@email.com|32000|4.0|95
-Farah Khan|Drive-Thru Attendant|farah.khan@email.com|30000|3.8|80
+Hassan Ahmed|Kitchen Staff|hassan.ahmed@email.com|32000|4|95
 Imran Khan|Fry Cook|imran.khan@email.com|29000|3.7|75
 Saba Ali|Cleaner|saba.ali@email.com|26000|3.2|65
 Ahmed Qureshi|Order Taker|ahmed.qureshi@email.com|27000|3.6|90

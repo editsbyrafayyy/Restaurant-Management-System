@@ -110,20 +110,7 @@ public:
 		iss >> orderscompleted;
 	}
 
-	void setFromUserInput() {
-		cout << "Enter employee name: ";
-		getline(cin, name);
-
-		cout << "Enter employee position: ";
-		getline(cin, position);
-
-		cout << "Enter employee contact info: ";
-		getline(cin, contactinfo);
-
-		cout << "Enter employee salary: ";
-		cin >> salary;
-		cin.ignore();
-	}
+	
 };
 
 void saveEmployeesToFile(vector<Employee>& employees, const string& filename) {
@@ -338,7 +325,15 @@ void displayOptions(int a) {
 		cout << "3) Mark Attendance" << endl;
 		cout << "4) Check Attendance" << endl;
 		cout << "5) Fire Employee" << endl;
-		cout << "6) Exit Managing Employees and go back to Main Menu" << endl;
+		cout << "6) Change Employee information" << endl;
+		cout << "0) Exit Managing Employees and go back to Main Menu" << endl;
+	}
+	else if (a==4) // CHANGE EMPLOYEE INFO OPTIONS
+	{
+		cout << "1) Change Name" << endl;
+		cout << "2) Change Position" << endl;
+		cout << "3) Change Contact Information" << endl;
+		cout << "4) Increase or decrease Salary" << endl;
 	}
 }
 
@@ -556,7 +551,7 @@ void manageEmployees() {
 			loadEmployeesFromFile(employees, filename2);
 			for (Employee item : employees) {
 				item.dispEmpInfo();
-				cout << "____________________________" << endl;
+				cout << "\n____________________________" << endl;
 			}
 		}
 		else if (option == 2)   // Hire New employee
@@ -564,7 +559,30 @@ void manageEmployees() {
 			system("cls");
 			cout << "Congratulations on hiring new employee\n" << "Please enter the new employees details" << endl;
 			Employee newEmp;
-			newEmp.setFromUserInput(); //custom function that takes input from user and stores it to the object
+			
+			string name;
+			cout << "Enter employee name: ";
+			cin >> name;
+
+			string position;
+			cout << "Enter employee position: ";
+			cin >> position;
+
+			string contacinfo;
+			cout << "Enter employee contact info: ";
+			cin >> contacinfo; cin.ignore();
+
+			int salary;
+			cout << "Enter employee salary: ";
+			while (!(cin >> salary)) { //             Validation check ewww
+				cin.clear();  // Clear the error flag
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard invalid input
+				cout << "Invalid input. Please enter a numeric value for salary: ";
+			}
+
+			newEmp.setName(name); newEmp.setPosition(position);
+			newEmp.setContactInfo(contacinfo); newEmp.setSalary(salary);
+			
 			employees.push_back(newEmp);
 			saveEmployeesToFile(employees, filename2);
 		}
@@ -670,7 +688,7 @@ void manageEmployees() {
 			cin >> n;
 			n--;
 
-			if (n >= 1 && n <= (employees.size())) {
+			if (n >= 1 && n < (employees.size())) {
 				// GET FIRED LMAO SKILL ISSUE + RATIO XD
 				employees.erase(employees.begin() + n);
 
@@ -680,9 +698,75 @@ void manageEmployees() {
 			else {
 				cout << "Invalid choice. No employee fired.\n"; //Validation check ;(
 			}
-
+			saveEmployeesToFile(employees,filename2);
 		}
-		else if (option == 6) // Go back to main menu
+		else if (option==6) // CHANGE EMPLOYEE DETAILS
+		{
+			system("cls");
+			loadEmployeesFromFile(employees, filename2); int n = 0;
+			for (Employee emp : employees) {
+				cout << ++n << ") " << emp.getName() << endl;
+			}
+			cout << "\nPlease choose an employee to modify their details" << endl;
+			bool c = true;
+			do
+			{
+				cout << "Enter your option (number behind their name): ";
+				cin >> n; 
+				if (n<1 || n>employees.size() + 1)
+				{
+					cout << "Please choose a correct number from the list displayed above" << endl; 
+					c = false;
+				}
+				else
+				{
+					c = true;
+				}
+			} while (c=false);
+			system("cls");
+			cout << "What do you want to change about employee: " << employees[--n].getName() << endl;
+			displayOptions(4);
+			do {
+				cout << "\nChoose your option by entering it's number: ";
+				cin.ignore(); cin >> n;
+				if (n < 1 || n>4)
+				{
+					cout << "Please choose a correct number from the list displayed above" << endl;
+					c = false;
+				}
+				else
+				{
+					c = true;
+				}
+			} while (c = false);
+
+			if (c == 1) {
+				cout << "Please enter new name for your employee: ";
+				string newname;
+				getline(cin, newname);
+				employees[n].setName(newname);
+			}
+			else if (c == 2) {
+				cout << "Please enter new Position for your employee: ";
+				string newpos;
+				getline(cin, newpos);
+				employees[n].setPosition(newpos);
+			}
+			else if (c == 3) {
+				cout << "Please enter new contact info for your employee: ";
+				string newc;
+				getline(cin, newc);
+				employees[n].setContactInfo(newc);
+			}
+			else if (c == 4) {
+				cout << "Please enter salary adjustment (+ve for inc and -ve for dec) in pakistani rupees: ";
+				int news;
+				cin >> news;
+				employees[n].setSalary(news);
+			}
+			saveEmployeesToFile(employees,filename2);
+		}
+		else if (option == 0) // Go back to main menu
 		{
 			break;
 		}
