@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 //__________________________filenames_________________________________
 const string filename = "hardees.txt"; 
 const string filename2 = "employee.txt";
@@ -37,12 +36,12 @@ public:
 		name(name),position(position),contactinfo(contactinfo),salary(salary),totalrating(0),orderscompleted(0){}
 
 	void dispempinfo() {
-		cout << endl << "name: " << name;
-		cout << endl << "position: " << position;
-		cout << endl << "contact info: " << contactinfo;
-		cout << endl << "salary: " << salary;
-		cout << endl << "rating: " << (totalrating>0) ? totalrating/orderscompleted:0 ; // this statement feels like a flex fr
-		cout << endl << "orders completed: " << orderscompleted;
+		cout << endl << "Name: " << name;
+		cout << endl << "Position: " << position;
+		cout << endl << "Contact info: " << contactinfo;
+		cout << endl << "Salary: " << salary;
+		cout << endl << "Rating: " << (totalrating>0) ? totalrating/orderscompleted:0 ; // this statement feels like a flex fr
+		cout << endl << "Orders completed: " << orderscompleted;
 	}
 
 	string getname() {
@@ -123,10 +122,10 @@ void saveemployeestofile(vector<employee>& employees, const string& filename) {
 			file << emp.serialize() << '\n';
 		}
 		file.close();
-		cout << "data saved to file: " << filename << endl;
+		cout << "Data saved to file: " << filename << endl;
 	}
 	else {
-		cout << "error opening file: " << filename << endl;
+		cout << "Error opening file: " << filename << endl;
 	}
 }
 
@@ -145,10 +144,9 @@ void loademployeesfromfile(vector<employee>& employees, const string& filename) 
 		}
 
 		file.close();
-		cout << "data loaded from file: " << filename << endl;
 	}
 	else {
-		cout << "error opening file: " << filename << endl;
+		cout << "Error opening file: " << filename << endl;
 	}
 }
 //____________________________________________________________________________________________________________________
@@ -164,7 +162,12 @@ public:
 
 	menuitem() : name(""), price(0.0), description(""), availaiblity(false), category("") {}
 
-	void setname(std::string itemname) {
+	void setDiscount(int num) {
+		price *= (100 - num);
+		price /= 100;
+	}
+
+	void setname(string itemname) {
 		name = itemname;
 	}
 
@@ -280,7 +283,7 @@ int main() {
 		{
 			managemenu();
 		}
-		else if (n==3)
+		else if (n==2)
 		{
 			manageemployees();
 		}
@@ -290,6 +293,11 @@ int main() {
 			cout << "thanks for using our application!" << endl;
 			break;
 		}
+		else
+		{
+			system("cls");
+			cout << "Please choose from numbers 0-2" << endl;
+		}
 	}
 	return 0;
 }
@@ -298,42 +306,42 @@ void displayoptions(int a) {
 
 	if (a == 0) // main menu options
 	{
-		cout << "1) manage resturant menu" << endl;
-		cout << "3) manage employees" << endl;
-		cout << "0) exit program" << endl;
+		cout << "1) Manage resturant menu" << endl;
+		cout << "2) Manage employees" << endl;
+		cout << "0) Exit program" << endl;
 	}
 	else if (a == 1)// managing resturant menu options
 	{
-		cout << "1) display current menu" << endl;
-		cout << "2) add new item to menu" << endl;
-		cout << "3) remove an item from menu" << endl;
-		cout << "4) modidfy item details" << endl;
-		cout << "5) exit menu managing and go back to main menu" << endl;
+		cout << "1) Display current menu" << endl;
+		cout << "2) Add new item to menu" << endl;
+		cout << "3) Remove an item from menu" << endl;
+		cout << "4) Modidfy item details" << endl;
+		cout << "5) Exit menu managing and go back to main menu" << endl;
 	}
 	else if (a==2) //modifying item details (subset of managing menu)
 	{
-		cout << "1) change name" << endl;
-		cout << "2) change price" << endl;
-		cout << "3) change description" << endl;
-		cout << "4) change availaibility" << endl;
-		cout << "5) change category" << endl;
+		cout << "1) Change name" << endl;
+		cout << "2) Change price" << endl;
+		cout << "3) Change description" << endl;
+		cout << "4) Change availaibility" << endl;
+		cout << "5) Change category" << endl;
 	}
 	else if (a==3) // manage employee options
 	{
-		cout << "1) list all employees" << endl;
-		cout << "2) hire new employee" << endl;
-		cout << "3) mark attendance" << endl;
-		cout << "4) check attendance" << endl;
-		cout << "5) fire employee" << endl;
-		cout << "6) change employee information" << endl;
-		cout << "0) exit managing employees and go back to main menu" << endl;
+		cout << "1) List all employees" << endl;
+		cout << "2) Hire new employee" << endl;
+		cout << "3) Mark attendance" << endl;
+		cout << "4) Check attendance" << endl;
+		cout << "5) Fire employee" << endl;
+		cout << "6) Change employee information" << endl;
+		cout << "0) Exit managing employees and go back to main menu" << endl;
 	}
 	else if (a==4) // change employee info options
 	{
-		cout << "1) change name" << endl;
-		cout << "2) change position" << endl;
-		cout << "3) change contact information" << endl;
-		cout << "4) increase or decrease salary" << endl;
+		cout << "1) Change name" << endl;
+		cout << "2) Change position" << endl;
+		cout << "3) Change contact information" << endl;
+		cout << "4) Increase or Decrease salary" << endl;
 	}
 }
 
@@ -351,14 +359,14 @@ void managemenu() {
 		if (option == 1) // display current menu
 		{
 			for (const auto& item : loadedmenu) {
-				cout << "item name: " << item.getname() << endl;
-				cout << "category: " << item.getcategory() << endl;
-				cout << "price: $" << item.getprice() << endl;
-				cout << "description: " << item.getdescription() << endl;
-				cout << "availability: " << (item.getavailaibilty() ? "available" : "not available") << endl;
+				cout << "Item name: " << item.getname() << endl;
+				cout << "Category: " << item.getcategory() << endl;
+				cout << "Price: $" << item.getprice() << endl;
+				cout << "Description: " << item.getdescription() << endl;
+				cout << "Availability: " << (item.getavailaibilty() ? "Available" : "Not Available :(") << endl;
 				cout << "-----------------\n";
 			}
-			int n; cout << endl << "enter 0 to go back to main menu or anyother number to manage resturant menu: ";
+			int n; cout << endl << "Enter 0 to go back to main menu or Anyother number to stay: ";
 			cin >> n;
 			if (n==0)
 			{
@@ -370,14 +378,14 @@ void managemenu() {
 			string newitemname, newitemdescription, newitemcategory;
 			double newitemprice;
 
-			cout << "enter details for the new menu item:\n";
-			cout << "name: ";
+			cout << "Enter details for the new menu item:\n";
+			cout << "Name: ";
 			getline(cin, newitemname);
-			cout << "description: ";
+			cout << "Description: ";
 			getline(cin, newitemdescription);
-			cout << "category: ";
+			cout << "Category: ";
 			getline(cin, newitemcategory);
-			cout << "price: ";
+			cout << "Price: ";
 			cin >> newitemprice;
 
 			// create a new menuitem
@@ -397,10 +405,10 @@ void managemenu() {
 			// save the updated menu items to the file
 			savemenuitemstofile(menuitems, filename);
 
-			cout << "new item added and saved to the menu file.\n";
+			cout << "New item added and Saved to the menu file. :)\n";
 
 			int n; 
-			cout << endl << "enter 0 to go back to main menu or anyother number to manage resturant menu: ";
+			cout << endl << "Enter 0 to go back or Anyother number to stay: ";
 			cin >> n;
 			if (n == 0)
 			{
@@ -410,8 +418,8 @@ void managemenu() {
 		else if (option == 3)//     remove an item from menu permenantly
 		{
 			system("cls");
-			cout << "warning: items deletion is permenant" << endl;
-			cout << "enter 'y' to load item list or anyother key to skip ahead: ";
+			cout << "Warning: items deletion is permenant" << endl;
+			cout << "Enter y to load item list or anyother key to skip ahead: ";
 			char y; cin >> y;
 			cin.ignore();
 			vector<menuitem> loadedmenu = loadmenuitemsfromfile(filename);
@@ -425,23 +433,23 @@ void managemenu() {
 				}
 			}
 			string delitem;
-			cout << "please enter the name of the item you want to delete: " << endl;
+			cout << "Please enter the name of the item you want to delete: " << endl;
 			getline(cin, delitem);
 
 			auto it = remove_if(loadedmenu.begin(), loadedmenu.end(), [delitem](const menuitem item)
 				{return (delitem == item.getname()) ? true : false; }); //i'm so surprised i wrote this myself lmao
 			if (it == loadedmenu.end())
 			{
-				cout << "item " << delitem << " not found :(" << endl;
+				cout << "Item " << delitem << " not found :(" << endl;
 			}
 			else
 			{
 				loadedmenu.erase(it, loadedmenu.end());
-				cout << "item removed succesfully! :)" << endl;
+				cout << "Item Removed succesfully! :)" << endl;
 			}
 
 			savemenuitemstofile(loadedmenu, filename);
-			int n; cout << endl << "enter 0 to go back to main menu or anyother number to manage resturant menu: ";
+			int n; cout << endl << "Enter 0 to go back to main menu or Anyother number to stay: ";
 			cin >> n;
 			if (n == 0)
 			{
@@ -459,7 +467,7 @@ void managemenu() {
 			}
 
 
-			cout << "enter the number of the item you want to modify: " << endl;
+			cout << "Enter the number of the Item you want to modify: " << endl;
 			int itemnum; cin >> itemnum; cin.ignore();
 
 			if (itemnum >= 0 && itemnum <= index)
@@ -470,24 +478,24 @@ void managemenu() {
 			if (found)
 			{
 				index = itemnum - 1;
-				cout << "item found!\n" << "what do you want to modify about this item?\n";
+				cout << "item found!\n" << "What do you like to modify about this item?\n";
 				displayoptions(2);
-				int n; cout << "enter your option by it's corresponding number: "; cin >> n; cin.ignore();
+				int n; cout << "Enter your option by it's corresponding number: "; cin >> n; cin.ignore();
 
 				if (n == 1)
 				{
-					cout << "enter new name: ";
+					cout << "Enter new name: ";
 					string newname; cin >> newname; cin.ignore();
 					loadedmenu[index].setname(newname);
 				}
 				else if (n == 2)
 				{
-					cout << "enter new price: ";
+					cout << "Enter new price: ";
 					double newprice; cin >> newprice;
 					loadedmenu[index].setprice(newprice);
 				}
 				else if (n == 3) {
-					cout << "enter new description: ";
+					cout << "Enter new description: ";
 					cin.ignore(); string newdesc;
 					getline(cin, newdesc);
 					loadedmenu[index].setdescription(newdesc);
@@ -495,18 +503,18 @@ void managemenu() {
 
 				else if (n == 4)
 				{
-					cout << "enter 0 for not availaible and 1 for avaiaible";
+					cout << "Enter 0 for not availaible and 1 for avaiaible";
 					bool aval; cin >> aval;
 					if (aval == 0 || aval == 1)
 					{
 						loadedmenu[index].setavailaibilty(aval);
 					}
 					else
-						cout << "error: enter either 0 or 1!";
+						cout << "Error: enter either 0 or 1!";
 				}
 				else if (n == 5)
 				{
-					cout << "enter new category: ";
+					cout << "Enter new category: ";
 					string newcat; cin >> newcat; cin.ignore();
 					loadedmenu[index].setcategory(newcat);
 				}
@@ -514,10 +522,11 @@ void managemenu() {
 			}
 			else
 			{
-				cout << "sorry the item name you entered was not found!" << endl
-					<< "make sure spellings are correct, search is also case sensitive";
+				cout << "Sorry the item name you entered was not found!" << endl
+					<< "Make sure spellings are correct, search is also case sensitive";
 			}
-			int n; cout << endl << "enter 0 to go back to main menu or anyother number to manage resturant menu: ";
+			int n; 
+			cout << endl << "Enter 0 to go back to main menu or anyother number to stay: ";
 			cin >> n;
 			if (n == 0)
 			{
@@ -540,10 +549,10 @@ void manageemployees() {
 	
 	system("cls");
 	while (true) {
-		cout << "-manage your employees-" << endl;
+		cout << "-Manage your Employees-" << endl;
 		displayoptions(3);
 		int option;
-		cout << endl << "enter your option(number) : ";
+		cout << endl << "Enter your option(number) : ";
 		cin >> option;
 		if (option == 1) // display employees
 		{
@@ -557,27 +566,27 @@ void manageemployees() {
 		else if (option == 2)   // hire new employee
 		{
 			system("cls");
-			cout << "congratulations on hiring new employee\n" << "please enter the new employees details" << endl;
+			cout << "Congratulations on hiring new employee\n" << "Please enter the new employees details" << endl;
 			employee newemp;
 			
 			string name;
-			cout << "enter employee name: ";
+			cout << "Enter employee name: ";
 			cin >> name;
 
 			string position;
-			cout << "enter employee position: ";
+			cout << "Enter employee position: ";
 			cin >> position;
 
 			string contacinfo;
-			cout << "enter employee contact info: ";
+			cout << "Enter employee contact info: ";
 			cin >> contacinfo; cin.ignore();
 
 			int salary;
-			cout << "enter employee salary: ";
+			cout << "Enter employee salary: ";
 			while (!(cin >> salary)) { //             validation check ewww
 				cin.clear();  // clear the error flag
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');  // discard invalid input
-				cout << "invalid input. please enter a numeric value for salary: ";
+				cout << "Invalid input. please enter a numeric value for salary: ";
 			}
 
 			newemp.setname(name); newemp.setposition(position);
@@ -589,7 +598,7 @@ void manageemployees() {
 		else if (option == 3)   // mark attendance
 		{
 			ofstream outfile("attendance.txt",ios::app);
-			cout << "\nwarning attendance can not be modified be carfeful\n\n";
+			cout << "\nWarning attendance can not be modified be carfeful\n\n";
 			if (outfile.is_open()) {
 				time_t now = time(0);
 				tm* currentdate = localtime(&now);
@@ -599,7 +608,7 @@ void manageemployees() {
 
 				for (employee emp : employees) {
 					char attendance;
-					cout << "is " << emp.getname() << " present? (y/n): ";
+					cout << "Is " << emp.getname() << " Present? (y/n): ";
 					cin >> attendance;
 
 					// converting to 1 for present, 0 for absent
@@ -610,21 +619,21 @@ void manageemployees() {
 				}
 
 				outfile.close();
-				cout << "attendance recorded and saved to attendance.txt.\n";
+				cout << "Attendance recorded and saved to attendance.txt.\n";
 			}
 			else {
-				cout << "error opening file: attendance.txt\n";
+				cout << "Error opening file: attendance.txt\n";
 			}
 		}
 		else if (option == 4) // reads attendance
 		{
 			string inputdate;
-			cout << "enter the date you want to check attendance of (dd/mm/yy): ";
+			cout << "Enter the date you want to check attendance of (dd/mm/yy): ";
 			cin >> inputdate;
 
 			// validation checks are tiring ;(
 			while (true) {
-				cout << "enter the date (dd/mm/yy): ";
+				cout << "Enter the date (dd/mm/yy): ";
 				cin >> inputdate;
 
 				if (inputdate.length() == 8) {
@@ -641,7 +650,7 @@ void manageemployees() {
 					}
 				}
 
-				cout << "invalid date format. please enter the date in dd/mm/yy format.\n";
+				cout << "Invalid date format. please enter the date in dd/mm/yy format.\n";
 				cin.clear();    // clear input buffer to handle invalid input
 				cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore remaining characters in the buffer
 			}
@@ -655,7 +664,7 @@ void manageemployees() {
 
 					// check if the date matches the user input
 					if (currentdate == inputdate) {
-						cout << "attendance for " << inputdate << ":\n";
+						cout << "Attendance for " << inputdate << ":\n";
 						// display attendance for each employee
 						for (employee emp : employees) {
 							size_t pos = line.find(emp.getname() + "|");
@@ -668,23 +677,23 @@ void manageemployees() {
 					}
 				}
 
-				cout << "no attendance found for the specified date.\n";
+				cout << "No attendance found for the specified date.\n";
 				infile.close();
 			}
 			else {
-				cout << "error opening file: attendance.txt\n";
+				cout << "Error opening file: attendance.txt\n";
 			}
 		}
 		else if (option == 5) // fire employee
 		{
 			loademployeesfromfile(employees, filename2); 
-			cout << "\nwarning, firing an employee will delete all their data including orders completed and rating\n";
+			cout << "\nWarning, Firing an employee will delete all their data including orders completed and rating\n";
 			int n = 1;
-			cout << "choose an employee to fire by entering the number behind their name" << endl;
+			cout << "Choose an employee to fire by entering the number behind their name" << endl;
 			for (employee emp : employees) {
 				cout << n++ << ") " << emp.getname() << endl;
 			}
-			cout << endl << "enter number: ";
+			cout << endl << "Enter number: ";
 			cin >> n;
 			n--;
 
@@ -692,11 +701,11 @@ void manageemployees() {
 				// get fired lmao skill issue + ratio xd
 				employees.erase(employees.begin() + n);
 
-				cout << "employee fired successfully.\n";
+				cout << "Employee fired successfully.\n";
 
 			}
 			else {
-				cout << "invalid choice. no employee fired.\n"; //validation check ;(
+				cout << "Invalid choice. no employee fired.\n"; //validation check ;(
 			}
 			saveemployeestofile(employees,filename2);
 		}
@@ -707,15 +716,15 @@ void manageemployees() {
 			for (employee emp : employees) {
 				cout << ++n << ") " << emp.getname() << endl;
 			}
-			cout << "\nplease choose an employee to modify their details" << endl;
+			cout << "\nPlease choose an employee to modify their details" << endl;
 			bool c = true;
 			do
 			{
-				cout << "enter your option (number behind their name): ";
+				cout << "Enter your option (number behind their name): ";
 				cin >> n; 
 				if (n<1 || n>employees.size() + 1)
 				{
-					cout << "please choose a correct number from the list displayed above" << endl; 
+					cout << "Please choose a correct number from the list displayed above" << endl; 
 					c = false;
 				}
 				else
@@ -724,14 +733,14 @@ void manageemployees() {
 				}
 			} while (c==false);
 			system("cls");
-			cout << "what do you want to change about employee: " << employees[--n].getname() << endl;
+			cout << "What do you want to change about employee: " << employees[--n].getname() << endl;
 			displayoptions(4); int n2;
 			do {
-				cout << "\nchoose your option by entering it's number: ";
+				cout << "\nChoose your option by entering it's number: ";
 				cin >> n2;
 				if (n2 < 1 || n2>4)
 				{
-					cout << "please choose a correct number from the list displayed above" << endl;
+					cout << "Please choose a correct number from the list displayed above" << endl;
 					c = false;
 				}
 				else
@@ -741,28 +750,28 @@ void manageemployees() {
 			} while (!c);
 			cin.ignore();
 			if (n2 == 1) {
-				cout << "please enter new name for your employee: ";
+				cout << "Please enter new name for your employee: ";
 				string newname;
 				getline(cin, newname);
 				employees[n].setname(newname);
 				saveemployeestofile(employees, filename2);
 			}
 			else if (n2 == 2) {
-				cout << "please enter new position for your employee: ";
+				cout << "Please enter new position for your employee: ";
 				string newpos;
 				getline(cin, newpos);
 				employees[n].setposition(newpos);
 				saveemployeestofile(employees, filename2);
 			}
 			else if (n2 == 3) {
-				cout << "please enter new contact info for your employee: ";
+				cout << "Please enter new contact info for your employee: ";
 				string newc;
 				getline(cin, newc);
 				employees[n].setcontactinfo(newc);
 				saveemployeestofile(employees, filename2);
 			}
 			else if (n2 == 4) {
-				cout << "please enter salary adjustment (+ve for inc and -ve for dec) in pakistani rupees: ";
+				cout << "Please enter salary adjustment (+ve for inc and -ve for dec) in pakistani rupees: ";
 				int news;
 				cin >> news;
 				employees[n].setsalary(news);
@@ -776,10 +785,10 @@ void manageemployees() {
 		}
 		else
 		{
-			cout << "please enter an integer between 1 to 6" << endl;
+			cout << "Please enter an integer between 1 to 6" << endl;
 		}
 
-		cout << endl << "do you wish to continue managing employees (enter y) or not?(enter any char): ";
+		cout << endl << "Do you wish to continue Managing employees (y) or not?(any charachter): ";
 		char opt; cin >> opt;
 		if (!(opt=='y' || opt=='Y'))
 		{
