@@ -1,64 +1,10 @@
-Order ID: 1
+Order ID: 21
 Customer Name: ali
-Items Ordered: hoho
-Quantity: 2
-Price: 23 Rs
-Total Cost: 46 Rs
-Assigned Table: 1
-
+Items Ordered: 
+Quantity: 3
+Total Cost (Rs): 8091
 Order ID: 0
 Customer Name: 
 Items Ordered: 
 Quantity: 0
-Price per item: 0
-Total Cost: 0
-Assigned Table: 1
-
-Order ID: 1
-Customer Name: ali
-Items Ordered: hoho
-Quantity: 2
-Price per item: 23
-Total Cost: 46
-Assigned Table: 1
-
-Order ID: 3
-Customer Name: joe
-Items Ordered: pho
-Quantity: 23
-Price: 32 Rs
-Total Cost: 736 Rs
-Assigned Table: 2
-
-Order ID: 0
-Customer Name: 
-Items Ordered: 
-Quantity: 0
-Price per item: 0
-Total Cost: 0
-Assigned Table: 1
-
-Order ID: 1
-Customer Name: ali
-Items Ordered: hoho
-Quantity: 2
-Price per item: 23
-Total Cost: 46
-Assigned Table: 1
-
-Order ID: 0
-Customer Name: 
-Items Ordered: 
-Quantity: 0
-Price per item: 0
-Total Cost: 0
-Assigned Table: 1
-
-Order ID: 3
-Customer Name: joe
-Items Ordered: pho
-Quantity: 23
-Price per item: 32
-Total Cost: 736
-Assigned Table: 2
-
+Total Cost (Rs): 0

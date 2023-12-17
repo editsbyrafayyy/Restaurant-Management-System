@@ -1,17 +1,17 @@
-Bacon, Egg & Cheese Biscuit*3.990000*Bacon, eggs, American Cheese, biscuit*1*Breakfast
-Chicken Tenders*6.490000*Fried chicken tenders, dipping sauce*1*Lunch
-Big Combo Meal*8.990000*Double cheeseburger, medium fries, medium drink*1*Lunch
-Caesar Salad*7.990000*Romaine lettuce, croutons, parmesan cheese, Caesar dressing*1*Lunch
-Grilled Chicken Sandwich*5.790000*Grilled chicken breast, lettuce, tomato, mayonnaise, bun*1*Lunch
-Fish Fillet Sandwich*6.990000*Breaded fish fillet, tartar sauce, lettuce, bun*1*Lunch
-Spicy Chicken Wrap*4.490000*Spicy chicken, lettuce, tomato, ranch dressing, tortilla*1*Lunch
-Loaded Nachos*8.290000*Tortilla chips, seasoned beef, cheese sauce, tomatoes, jalapeños*1*Appetizer
-Mozzarella Sticks*4.990000*Breaded mozzarella cheese sticks, marinara sauce*1*Appetizer
-Onion Rings*3.490000*Breaded onion rings, dipping sauce*1*Appetizer
-Cheese Fries*4.790000*French fries, cheese sauce, bacon bits, green onions*1*Appetizer
-Chocolate Milkshake*3.990000*Chocolate ice cream, milk, whipped cream, cherry*1*Beverage
-Strawberry Lemonade*2.490000*Lemonade, strawberry flavoring, ice*1*Beverage
-Iced Coffee*2.790000*Cold brew coffee, milk, sweetener, ice*1*Beverage
-Classic Sundae*4.290000*Vanilla ice cream, hot fudge, whipped cream, nuts, cherry*1*Dessert
-Chocolate Brownie*3.490000*Rich chocolate brownie, vanilla ice cream*1*Dessert
-Fruit Parfait*4.990000*Yogurt, granola, mixed fruits, honey*1*Dessert
+Bacon, Egg & Cheese Biscuit*1197*Bacon, eggs, American Cheese, biscuit*1*Breakfast
+Chicken Tenders*1947*Fried chicken tenders, dipping sauce*1*Lunch
+Big Combo Meal*2697*Double cheeseburger, medium fries, medium drink*1*Lunch
+Caesar Salad*2397*Romaine lettuce, croutons, parmesan cheese, Caesar dressing*1*Lunch
+Grilled Chicken Sandwich*1737*Grilled chicken breast, lettuce, tomato, mayonnaise, bun*1*Lunch
+Fish Fillet Sandwich*2097*Breaded fish fillet, tartar sauce, lettuce, bun*1*Lunch
+Spicy Chicken Wrap*1347*Spicy chicken, lettuce, tomato, ranch dressing, tortilla*1*Lunch
+Loaded Nachos*2487*Tortilla chips, seasoned beef, cheese sauce, tomatoes, jalapeÃ±os*1*Appetizer
+Mozzarella Sticks*1497*Breaded mozzarella cheese sticks, marinara sauce*1*Appetizer
+Onion Rings*1047*Breaded onion rings, dipping sauce*1*Appetizer
+Cheese Fries*1437*French fries, cheese sauce, bacon bits, green onions*1*Appetizer
+Chocolate Milkshake*1197*Chocolate ice cream, milk, whipped cream, cherry*1*Beverage
+Strawberry Lemonade*747*Lemonade, strawberry flavoring, ice*1*Beverage
+Iced Coffee*837*Cold brew coffee, milk, sweetener, ice*1*Beverage
+Classic Sundae*1287*Vanilla ice cream, hot fudge, whipped cream, nuts, cherry*1*Dessert
+Chocolate Brownie*1047*Rich chocolate brownie, vanilla ice cream*1*Dessert
+Fruit Parfait*1497*Yogurt, granola, mixed fruits, honey*1*Dessert
